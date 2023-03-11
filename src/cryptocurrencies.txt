@@ -1,0 +1,2 @@
+1 Bitcoin Satoshi-Nakamoto 20000 2007
+2 Litecoin Satoshi-Nakamoto 100 2010

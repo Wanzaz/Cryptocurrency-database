@@ -9,13 +9,17 @@
 #include <time.h>    // function time and other for work with time
 #include <errno.h>
 
-typedef struct
-{
+
+typedef struct {
+    int id;
     char name[41];
     char founder_name[41];
     int price;
     int foundation_year;
+    bool removed;
 } TCryptocurrency;
+
+#define MAX 100
 
 
 void pause(void)
@@ -39,14 +43,36 @@ void clear(void)
 	#endif
 }
 
+int load(FILE *input, TCryptocurrency a[], int max_length)
+{
+    int i = 0;
+    while(i < max_length && 
+            fscanf(input, "%d %40s %40s %d %d",
+                &a[i].id,
+                a[i].name,
+                a[i].founder_name,
+                &a[i].price,
+                &a[i].foundation_year) == 5)
+    {
+        a[i].removed = false;
+        i++;
+    }
 
+    return i;
+}
 
 
 
 int main(int argc, char *argv[])
 {
+    TCryptocurrency array[MAX];
+
+    FILE *database = fopen("cryptocurrencies.txt", "r");
+
+    int n = load(database, array, MAX);
 
     
+    fclose(database);
 
     return 0;
 }
