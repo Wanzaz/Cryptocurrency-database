@@ -18,20 +18,26 @@ typedef struct
 } TCryptocurrency;
 
 
+void pause(void)
+{
+    #if defined __WIN32 || defined __WIN64
+        system("pause"); 
+	#else 
+		system("read a");
+	#endif
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void clear(void)
+{
+	#ifdef _WIN32 
+		system("cls");
+	#elif defined(unix) || defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+	    system("clear");
+	//add some other OSes here if needed
+	#else
+		#error "OS not supported."
+	#endif
+}
 
 
 
