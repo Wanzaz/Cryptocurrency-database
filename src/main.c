@@ -25,11 +25,10 @@ Měla by tam být funkce pro souhrn (počet, min, max, sum) a jednoduchý filtr.
 
 
 typedef struct {
-    int id;
+    int foundation_year;
     char name[41];
     char founder_name[41];
-    int price;
-    int foundation_year;
+    float price;
     bool removed;
 } TCryptocurrency;
 
@@ -60,13 +59,12 @@ void clear(void)
 int load(FILE *input, TCryptocurrency a[], int max_length)
 {
     int i = 0;
-    while(i < max_length && 
-            fscanf(input, "%d %40s %40s %d %d",
-                &a[i].id,
-                a[i].name,
-                a[i].founder_name,
-                &a[i].price,
-                &a[i].foundation_year) == 5)
+    while (i < max_length && 
+        fscanf(input, "%d %40s %40s %f",
+            &a[i].foundation_year,
+            a[i].name,
+            a[i].founder_name,
+            &a[i].price) == 4)
     {
         a[i].removed = false;
         i++;
@@ -77,17 +75,26 @@ int load(FILE *input, TCryptocurrency a[], int max_length)
 
 void write(FILE *output, TCryptocurrency a[], int length)
 {
-    for(int i = 0; i < length; i++) {
-        if(!a[i].removed) {
-            fprintf(output, "%d %s %s %d %d\n",
-                a[i].id,
+    for (int i = 0; i < length; i++) {
+        if (!a[i].removed) {
+            fprintf(output, "%d %s %s %f\n",
+                a[i].foundation_year,
                 a[i].name,
                 a[i].founder_name,
-                a[i].price,
-                a[i].foundation_year);
+                a[i].price);
         }
     }
 }
+
+// In progress
+/* void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length) */
+/* { */
+/*     for (int i = 0; i < length; i++) { */
+        
+/*     } */
+    
+
+/* } */
 
 void mainMenu()
 {
