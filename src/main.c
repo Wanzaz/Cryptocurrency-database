@@ -86,15 +86,76 @@ void write(FILE *output, TCryptocurrency a[], int length)
     }
 }
 
-// In progress
-/* void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length) */
-/* { */
-/*     for (int i = 0; i < length; i++) { */
-        
-/*     } */
-    
+void writeOutOfWholeDatabase(FILE *output, TCryptocurrency a[], int length)
+{
+    for (int i = 0; i < length; i++) {
+        if (!a[i].removed) {
+            fprintf(output, "%d %s %s %f\n",
+                a[i].foundation_year,
+                a[i].name,
+                a[i].founder_name,
+                a[i].price);
+        }
+    }
+    printf("\n");
+}
 
-/* } */
+// function to swap elements
+void swap(TCryptocurrency array[], int x, int y) {
+	TCryptocurrency temp = array[x];
+	array[x] = array[y];
+	array[y] = temp;
+}
+
+// function to find the partition position
+static inline
+int partition(TCryptocurrency array[], int start, int end) {
+	int p = (start + end)/2; // or other selection
+	TCryptocurrency pivot = array[p];
+	swap(array, p, start); // pivot removal on site
+
+	int left = start;
+	int right = end + 1;
+
+	while (true) {
+		while (array[++left].foundation_year < pivot.foundation_year) {
+			if (left == end) break; // find element >= pivot
+		}
+		while (pivot.foundation_year < array[--right].foundation_year) {
+			// this line doesn't have to be here - it shouldn't be executed in any time
+			/* if (left == end) break; // find element >= pivot */ 
+		}
+
+		if (left >= right) break;
+
+		swap(array,left, right);
+	} // while
+	
+	swap(array, right, start); // inserting pivot on final position
+	return right;
+}
+
+void _quickSort(TCryptocurrency array[], int start, int end) {
+
+	if (start >= end) return;
+
+	int pivot_position = partition(array, start, end);
+
+	_quickSort(array, start, pivot_position - 1);
+	_quickSort(array, pivot_position + 1, end);
+}
+
+void quickSort(TCryptocurrency array[], int n) {
+	_quickSort(array, 0, n - 1);
+	
+}
+
+void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length)
+{
+    quickSort(a, length);
+    rewind(output);
+    write(output, a, length);
+}
 
 void mainMenu()
 {
@@ -123,13 +184,14 @@ int main(int argc, char *argv[])
     TCryptocurrency array[MAX];
     char *inputpath = argv[1];
 
-    FILE *database = fopen(inputpath, "r");
+    FILE *database = fopen(inputpath, "r+");
 
     if (database == NULL) return -1;
 
     int n = load(database, array, MAX);
 
-    write(stdout, array, n);
+    writeOutOfWholeDatabase(stdout, array, n);
+    sortByFoundationYear(database, array, n);
 
     
     fclose(database);
