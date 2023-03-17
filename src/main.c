@@ -9,6 +9,20 @@
 #include <time.h>    // function time and other for work with time
 #include <errno.h>
 
+/**
+1. načtení dat ze souboru do pole struktur 
+(soubor je vyplněný aspoň 11 položkami, každá položka má 4 vlastnosti a jedna z toho je číselná), 
+zápis dat z pole struktur do souboru (dvě funkce). Při načítání do pole kontrolujte, 
+zda nepřesáhnete velikost pole. Pokud přesáhnete, další položky z pole nenačítejte a vypište hlášku, 
+že pole nemá dostatečnou kapacitu.
+
+2. další funkce pro řazení pole aspoň podle dvou vlastností (jedna číselná, jedna textová) - výpis na obrazovku.
+
+3. Zkontrolujte, že vám ostatní funkce pracují bez chyby. 
+Měla by tam být funkce pro souhrn (počet, min, max, sum) a jednoduchý filtr.
+
+**/
+
 
 typedef struct {
     int id;
@@ -61,15 +75,54 @@ int load(FILE *input, TCryptocurrency a[], int max_length)
     return i;
 }
 
+void write(FILE *output, TCryptocurrency a[], int length)
+{
+    for(int i = 0; i < length; i++) {
+        if(!a[i].removed) {
+            fprintf(output, "%d %s %s %d %d\n",
+                a[i].id,
+                a[i].name,
+                a[i].founder_name,
+                a[i].price,
+                a[i].foundation_year);
+        }
+    }
+}
+
+void mainMenu()
+{
+	printf(
+        "Searching Algorithms:\n"
+        "0 - exit\n"
+        "1 - write out a whole database\n"
+        "2 - add record\n"
+        "3 - remove record\n"
+        "4 - change record\n"
+        "5 - summary\n"
+        "Choose operation: "
+	);
+
+}
 
 
 int main(int argc, char *argv[])
 {
-    TCryptocurrency array[MAX];
+    if (argc != 2) {
+        printf("ERROR: Program should be executed like this:\n"
+               "\tclang main.c;./a.out inputfile\n");
+        return -1;
+    }
 
-    FILE *database = fopen("cryptocurrencies.txt", "r");
+    TCryptocurrency array[MAX];
+    char *inputpath = argv[1];
+
+    FILE *database = fopen(inputpath, "r");
+
+    if (database == NULL) return -1;
 
     int n = load(database, array, MAX);
+
+    write(stdout, array, n);
 
     
     fclose(database);

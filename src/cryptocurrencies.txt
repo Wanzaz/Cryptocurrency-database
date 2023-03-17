@@ -1,2 +1,12 @@
-1 Bitcoin Satoshi-Nakamoto 20000 2007
-2 Litecoin Satoshi-Nakamoto 100 2010
+1 Litecoin Satoshi-Nakamoto 81.11 2010
+2 Peercoin Sunny-King 0.45 2012
+3 Namecoin Vincent-Durham 1.30 2011
+4 Bitcoin Satoshi-Nakamoto 25605.50 2009
+5 Dogecoin Jackson Palmer 0.07 2013
+6 Tether Jan-Ludovicus-van-der-Velde 1.00 2015
+7 Titcoin Edward-Mansfield 0.00 2014
+8 Ethereum Vitalik-Buterin 1705.19 2015
+9 Cardano Charles-Hoskinson 0.33 2017
+10 SafeMoon SafeMoon-LLC 6.81 2021
+11 Bitcoin-Cash - 128.71 2017
+12 XLM Jed-McCaleb 16.00 2014
