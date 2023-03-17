@@ -69,7 +69,7 @@ int load(FILE *input, TCryptocurrency a[], int max_length)
 {
     int i = 0;
     while (i < max_length && 
-        fscanf(input, "%d %40s %40s %f",
+        fscanf(input, "%d %40s %40s %f\n",
             &a[i].foundation_year,
             a[i].name,
             a[i].founder_name,
@@ -79,6 +79,7 @@ int load(FILE *input, TCryptocurrency a[], int max_length)
         i++;
     }
 
+    /* rewind(input); */
     return i;
 }
 
@@ -86,7 +87,7 @@ void write(FILE *output, TCryptocurrency a[], int length)
 {
     for (int i = 0; i < length; i++) {
         if (!a[i].removed) {
-            fprintf(output, "%d %s %s %f\n",
+            fprintf(output, "%d %s %s %.2f\n",
                 a[i].foundation_year,
                 a[i].name,
                 a[i].founder_name,
@@ -99,7 +100,7 @@ void writeOutOfWholeDatabase(FILE *output, TCryptocurrency a[], int length)
 {
     for (int i = 0; i < length; i++) {
         if (!a[i].removed) {
-            fprintf(output, "%d %s %s %f\n",
+            fprintf(output, "%d %s %s %.2f\n",
                 a[i].foundation_year,
                 a[i].name,
                 a[i].founder_name,
@@ -170,6 +171,15 @@ void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length)
     write(output, a, length);
 }
 
+bool isSortedByFoundationYear(TCryptocurrency array[], int length) {
+    for (int i = 0; i < length - 1; i++) {
+        if (array[i].foundation_year > array[i + 1].foundation_year) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 
 /*************** MENUs ***************/
@@ -180,10 +190,12 @@ void mainMenu()
         "Searching Algorithms:\n"
         "0 - exit\n"
         "1 - write out a whole database\n"
-        "2 - add record\n"
-        "3 - remove record\n"
-        "4 - change record\n"
+        /* "2 - add record\n" */
+        /* "3 - remove record\n" */
+        /* "4 - change record\n" */
         "5 - summary\n"
+        "6 - sort by foundation year\n"
+        "7 - is databse sorted by foundation year?\n"
         "Choose operation: "
 	);
 
@@ -212,6 +224,9 @@ int main(int argc, char *argv[])
 
     writeOutOfWholeDatabase(stdout, array, n);
     sortByFoundationYear(database, array, n);
+
+    printf("[SORTED]: %s\n", isSortedByFoundationYear(array, n) ? "YES" : "NO");
+
 
     
     fclose(database);
