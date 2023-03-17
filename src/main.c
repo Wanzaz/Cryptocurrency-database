@@ -17,6 +17,7 @@ zda nepřesáhnete velikost pole. Pokud přesáhnete, další položky z pole ne
 že pole nemá dostatečnou kapacitu.
 
 2. další funkce pro řazení pole aspoň podle dvou vlastností (jedna číselná, jedna textová) - výpis na obrazovku.
+    - razeni podle roku zalozeni neni na obrazovce protoze dava vetsi smysl mit podle toho serazenou databazi
 
 3. Zkontrolujte, že vám ostatní funkce pracují bez chyby. 
 Měla by tam být funkce pro souhrn (počet, min, max, sum) a jednoduchý filtr.
@@ -34,6 +35,10 @@ typedef struct {
 
 #define MAX 100
 
+
+
+
+/*************** PAUSE AND CLEAR ***************/
 
 void pause(void)
 {
@@ -55,6 +60,10 @@ void clear(void)
 		#error "OS not supported."
 	#endif
 }
+
+
+
+/*************** LOADING AND WRITING OUT ***************/
 
 int load(FILE *input, TCryptocurrency a[], int max_length)
 {
@@ -99,6 +108,10 @@ void writeOutOfWholeDatabase(FILE *output, TCryptocurrency a[], int length)
     }
     printf("\n");
 }
+
+
+
+/*************** SORTING FUNCTIONS - BY YEAR AND LENGTH OF NAME ***************/
 
 // function to swap elements
 void swap(TCryptocurrency array[], int x, int y) {
@@ -157,6 +170,10 @@ void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length)
     write(output, a, length);
 }
 
+
+
+/*************** MENUs ***************/
+
 void mainMenu()
 {
 	printf(
@@ -172,6 +189,9 @@ void mainMenu()
 
 }
 
+
+
+/*************** MAIN ***************/
 
 int main(int argc, char *argv[])
 {
