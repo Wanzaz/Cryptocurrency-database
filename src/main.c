@@ -242,7 +242,7 @@ bool isSortedByFounderNameLength(TCryptocurrency array[], int length)
 void sortByFounderNameLength(FILE *output, TCryptocurrency array[], int length)
 {
     quickSortString(array, length);
-    write(stdout, array, length);
+    write(output, array, length);
     printf("\n\n[DATABASE SORTED BY THE FOUNDER NAME'S LENGTH]: %s\n", isSortedByFounderNameLength(array, length) ? "YES" : "NO");
 }
 
@@ -275,18 +275,16 @@ void summary(TCryptocurrency array[], int n)
 
 
 
-
 /*************** FILTER FUNCTION ***************/
 
 void theOGs(FILE *output, TCryptocurrency array[], int n)
 {
-    printf("what");
+    printf("[THE OG CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR 2014]:\n");
     for (int i = 0; i < n - 1; i++) {
         if (array[i].foundation_year < 2014) {
-            fprintf(output, "%d. OG %s", i + 1, array[i].name);
+            fprintf(output, " %s\n", array[i].name);
         }
     }
-    printf("what2");
 }
 
 
@@ -306,7 +304,7 @@ void mainMenu()
         "\t5 - summary\n"
         "\t6 - sort by a foundation year\n"
         "\t7 - sort by a founder name's length\n"
-        "\t8 - see the OGs\n"
+        "\t8 - see the OGs (which were founded before year 2014)\n"
         "Choose an operation: "
 	);
 
@@ -357,7 +355,7 @@ int main(int argc, char *argv[])
                 sortByFoundationYear(database, array, n);
                 break;
             case 7: clear();
-                sortByFounderNameLength(database, array, n);
+                sortByFounderNameLength(stdout, array, n);
                 break;
             case 8: clear();
                     theOGs(stdout, array, n);
