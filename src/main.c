@@ -217,22 +217,22 @@ void _quickSortString(TCryptocurrency array[], int start, int end)
 {
 	if (start >= end) return;
 
-	int pivot_position = partition(array, start, end);
+	int pivot_position = partitionString(array, start, end);
 
-	_quickSort(array, start, pivot_position - 1);
-	_quickSort(array, pivot_position + 1, end);
+	_quickSortString(array, start, pivot_position - 1);
+	_quickSortString(array, pivot_position + 1, end);
 }
 
 void quickSortString(TCryptocurrency array[], int n)
 {
-	_quickSort(array, 0, n - 1);
+	_quickSortString(array, 0, n - 1);
 	
 }
 
 bool isSortedByFounderNameLength(TCryptocurrency array[], int length)
 {
     for (int i = 0; i < length - 1; i++) {
-        if (strlen(array[i].founder_name) < strlen(array[i + 1].founder_name)) {
+        if (strlen(array[i].founder_name) > strlen(array[i + 1].founder_name)) {
             return false;
         }
     }
