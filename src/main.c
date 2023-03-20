@@ -334,8 +334,6 @@ int main(int argc, char *argv[])
     int n = load(database, array, MAX);
 
 
-
-
     int choice = 1;
 
     while (choice != 0) {
@@ -365,6 +363,14 @@ int main(int argc, char *argv[])
                     theOGs(stdout, array, n);
                 break;
         }
+        
+        if (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6 && choice != 7 && choice != 8) {
+            printf("\n[ERROR]: Uknown operation\n"
+                   " Exiting the program...\n"
+                    );
+            exit(-1);
+        }
+
         if (choice != 0) {
             pause();
         }
