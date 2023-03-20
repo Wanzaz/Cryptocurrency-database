@@ -107,7 +107,6 @@ void writeOutOfWholeDatabase(FILE *output, TCryptocurrency a[], int length)
                 a[i].price);
         }
     }
-    printf("\n");
 }
 
 
@@ -115,7 +114,8 @@ void writeOutOfWholeDatabase(FILE *output, TCryptocurrency a[], int length)
 /*************** SORTING FUNCTIONS - BY YEAR AND LENGTH OF NAME ***************/
 
 // function to swap elements
-void swap(TCryptocurrency array[], int x, int y) {
+void swap(TCryptocurrency array[], int x, int y)
+{
 	TCryptocurrency temp = array[x];
 	array[x] = array[y];
 	array[y] = temp;
@@ -123,7 +123,8 @@ void swap(TCryptocurrency array[], int x, int y) {
 
 // function to find the partition position
 static inline
-int partition(TCryptocurrency array[], int start, int end) {
+int partition(TCryptocurrency array[], int start, int end)
+{
 	int p = (start + end)/2; // or other selection
 	TCryptocurrency pivot = array[p];
 	swap(array, p, start); // pivot removal on site
@@ -149,8 +150,8 @@ int partition(TCryptocurrency array[], int start, int end) {
 	return right;
 }
 
-void _quickSort(TCryptocurrency array[], int start, int end) {
-
+void _quickSort(TCryptocurrency array[], int start, int end)
+{
 	if (start >= end) return;
 
 	int pivot_position = partition(array, start, end);
@@ -159,19 +160,14 @@ void _quickSort(TCryptocurrency array[], int start, int end) {
 	_quickSort(array, pivot_position + 1, end);
 }
 
-void quickSort(TCryptocurrency array[], int n) {
+void quickSort(TCryptocurrency array[], int n)
+{
 	_quickSort(array, 0, n - 1);
 	
 }
 
-void sortByFoundationYear(FILE *output, TCryptocurrency a[], int length)
+bool isSortedByFoundationYear(TCryptocurrency array[], int length)
 {
-    quickSort(a, length);
-    rewind(output);
-    write(output, a, length);
-}
-
-bool isSortedByFoundationYear(TCryptocurrency array[], int length) {
     for (int i = 0; i < length - 1; i++) {
         if (array[i].foundation_year > array[i + 1].foundation_year) {
             return false;
@@ -180,23 +176,138 @@ bool isSortedByFoundationYear(TCryptocurrency array[], int length) {
     return true;
 }
 
+void sortByFoundationYear(FILE *output, TCryptocurrency array[], int length)
+{
+    quickSort(array, length);
+    rewind(output);
+    write(output, array, length);
+    write(stdout, array, length);
+    printf("\n\n[DATABASE SORTED BY A FOUNDATION YEAR]: %s\n", isSortedByFoundationYear(array, length) ? "YES" : "NO");
+}
+
+static inline
+int partitionString(TCryptocurrency array[], int start, int end)
+{
+	int p = (start + end)/2; // or other selection
+	TCryptocurrency pivot = array[p];
+	swap(array, p, start); // pivot removal on site
+
+	int left = start;
+	int right = end + 1;
+
+	while (true) {
+		while (strlen(array[++left].founder_name) < strlen(pivot.founder_name)) {
+			if (left == end) break; // find element >= pivot
+		}
+		while (strlen(pivot.founder_name) < strlen(array[--right].founder_name)) {
+			// this line doesn't have to be here - it shouldn't be executed in any time
+			/* if (left == end) break; // find element >= pivot */ 
+		}
+
+		if (left >= right) break;
+
+		swap(array,left, right);
+	} // while
+	
+	swap(array, right, start); // inserting pivot on final position
+	return right;
+}
+
+void _quickSortString(TCryptocurrency array[], int start, int end)
+{
+	if (start >= end) return;
+
+	int pivot_position = partition(array, start, end);
+
+	_quickSort(array, start, pivot_position - 1);
+	_quickSort(array, pivot_position + 1, end);
+}
+
+void quickSortString(TCryptocurrency array[], int n)
+{
+	_quickSort(array, 0, n - 1);
+	
+}
+
+bool isSortedByFounderNameLength(TCryptocurrency array[], int length)
+{
+    for (int i = 0; i < length - 1; i++) {
+        if (strlen(array[i].founder_name) < strlen(array[i + 1].founder_name)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void sortByFounderNameLength(FILE *output, TCryptocurrency array[], int length)
+{
+    quickSortString(array, length);
+    write(stdout, array, length);
+    printf("\n\n[DATABASE SORTED BY THE FOUNDER NAME'S LENGTH]: %s\n", isSortedByFounderNameLength(array, length) ? "YES" : "NO");
+}
+
+
+
+/*************** SUMMARY ***************/
+
+int averageFoundationYear(TCryptocurrency array[], int n)
+{
+    int sum = 0;
+    for (int i = 0; i < n - 1; i++) {
+        sum += array[i].foundation_year;
+    }
+
+    return sum/(n - 1);
+}
+
+void summary(TCryptocurrency array[], int n)
+{
+    int average = averageFoundationYear(array, n);
+    int youngest = array[0].foundation_year;
+    int oldest = array[n - 1].foundation_year;
+    printf("[SUMMARY]:\n"
+           "The number of records: %d\n"
+           "The average year of foundation: %d\n"
+           "The youngest cryptocurrency was founded in year: %d\n"
+           "The oldest cryptocurrency was founded in year: %d\n"
+           , n, average, youngest, oldest);
+}
+
+
+
+
+/*************** FILTER FUNCTION ***************/
+
+void theOGs(FILE *output, TCryptocurrency array[], int n)
+{
+    printf("what");
+    for (int i = 0; i < n - 1; i++) {
+        if (array[i].foundation_year < 2014) {
+            fprintf(output, "%d. OG %s", i + 1, array[i].name);
+        }
+    }
+    printf("what2");
+}
+
 
 
 /*************** MENUs ***************/
 
 void mainMenu()
 {
+    clear();
 	printf(
-        "Searching Algorithms:\n"
-        "0 - exit\n"
-        "1 - write out a whole database\n"
-        /* "2 - add record\n" */
-        /* "3 - remove record\n" */
-        /* "4 - change record\n" */
-        "5 - summary\n"
-        "6 - sort by foundation year\n"
-        "7 - is databse sorted by foundation year?\n"
-        "Choose operation: "
+        "Cryptocurrency Database Program:\n"
+        "\t0 - exit\n"
+        "\t1 - write out a whole database\n"
+        /* "\t2 - add a record\n" */
+        /* "\t3 - remove a record\n" */
+        /* "\t4 - change a record\n" */
+        "\t5 - summary\n"
+        "\t6 - sort by a foundation year\n"
+        "\t7 - sort by a founder name's length\n"
+        "\t8 - see the OGs\n"
+        "Choose an operation: "
 	);
 
 }
@@ -222,13 +333,42 @@ int main(int argc, char *argv[])
 
     int n = load(database, array, MAX);
 
-    writeOutOfWholeDatabase(stdout, array, n);
-    sortByFoundationYear(database, array, n);
-
-    printf("[SORTED]: %s\n", isSortedByFoundationYear(array, n) ? "YES" : "NO");
 
 
-    
+
+    int choice = 1;
+
+    while (choice != 0) {
+        mainMenu();
+        scanf("%d", &choice);
+        
+        switch(choice) {
+            case 1: clear();
+                writeOutOfWholeDatabase(stdout, array, n);
+                break;
+            /* case 2: clear(); */
+            /*     break; */
+            /* case 3: clear(); */
+            /*     break; */
+            /* case 4: clear(); */
+            /*     break; */
+            case 5: clear();
+                summary(array, n);
+                break;
+            case 6: clear();
+                sortByFoundationYear(database, array, n);
+                break;
+            case 7: clear();
+                sortByFounderNameLength(database, array, n);
+                break;
+            case 8: clear();
+                    theOGs(stdout, array, n);
+                break;
+        }
+        if (choice != 0) {
+            pause();
+        }
+    }
     fclose(database);
 
     return 0;
