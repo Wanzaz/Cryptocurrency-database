@@ -289,6 +289,35 @@ void theOGs(FILE *output, TCryptocurrency array[], int n)
 
 
 
+/*************** SEARCHING ***************/
+
+void searchByName(TCryptocurrency array[], int n)
+{
+    int i = 0;
+    int found = 0;
+    char searched_name[41];
+    printf("Enter a name of searched cryptocurrency: ");
+    scanf("%40s", searched_name);
+
+    for (int i = 0; i < n; i++) {
+        if (strcmp(array[i].name, searched_name) == 0) {
+            printf("%d %s %s %.2f\n",
+                    array[i].foundation_year,
+                    array[i].name,
+                    array[i].founder_name,
+                    array[i].price);
+            found++;
+        }
+    }
+
+    if (found == 0) {
+        printf("Item wasn't found.\n");
+    }
+    
+}
+
+
+
 /*************** MENUs ***************/
 
 void mainMenu()
@@ -301,10 +330,11 @@ void mainMenu()
         /* "\t2 - add a record\n" */
         /* "\t3 - remove a record\n" */
         /* "\t4 - change a record\n" */
-        "\t5 - summary\n"
-        "\t6 - sort by a foundation year\n"
-        "\t7 - sort by a founder name's length\n"
-        "\t8 - see the OGs (which were founded before year 2014)\n"
+        "\t5 - search for element\n"
+        "\t6 - summary\n"
+        "\t7 - sort by a foundation year\n"
+        "\t8 - sort by a founder name's length\n"
+        "\t9 - see the OGs (which were founded before year 2014)\n"
         "Choose an operation: "
 	);
 
@@ -349,15 +379,18 @@ int main(int argc, char *argv[])
             /* case 4: clear(); */
             /*     break; */
             case 5: clear();
-                summary(array, n);
+                searchByName(array, n);
                 break;
             case 6: clear();
-                sortByFoundationYear(database, array, n);
+                summary(array, n);
                 break;
             case 7: clear();
-                sortByFounderNameLength(stdout, array, n);
+                sortByFoundationYear(database, array, n);
                 break;
             case 8: clear();
+                sortByFounderNameLength(stdout, array, n);
+                break;
+            case 9: clear();
                     theOGs(stdout, array, n);
                 break;
         }
