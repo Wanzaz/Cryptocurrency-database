@@ -316,6 +316,30 @@ void searchByName(TCryptocurrency array[], int n)
     
 }
 
+void searchByFoundationYear(TCryptocurrency array[], int n)
+{
+    int i = 0;
+    int found = 0;
+    int searched_year;
+    printf("Enter a foundation year of searched cryptocurrency: ");
+    scanf("%d", &searched_year);
+
+    for (int i = 0; i < n; i++) {
+        if (array[i].foundation_year == searched_year) {
+            printf("%d %s %s %.2f\n",
+                    array[i].foundation_year,
+                    array[i].name,
+                    array[i].founder_name,
+                    array[i].price);
+            found++;
+        }
+    }
+
+    if (found == 0) {
+        printf("Item wasn't found.\n");
+    }
+    
+}
 
 
 /*************** MENUs ***************/
@@ -337,7 +361,46 @@ void mainMenu()
         "\t9 - see the OGs (which were founded before year 2014)\n"
         "Choose an operation: "
 	);
+}
 
+void subSearchMenu()
+{
+    clear();
+	printf(
+        "Menu for searching:\n"
+        "\t0 - exit\n"
+        "\t1 - search by name of cryptocurrency\n"
+        "\t2 - search by foundation year of cryptocurrency\n"
+        "Choose an operation: ");
+}
+
+void searchMenu(TCryptocurrency array[], int n)
+{
+    int choice = 1;
+
+    while(choice != 0) {
+        subSearchMenu();
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1: clear();
+                searchByName(array, n);
+                break;
+            case 2: clear();
+                searchByFoundationYear(array, n);
+                break;
+        }
+
+        if (choice != 0 && choice != 1 && choice != 2) {
+            printf("\n[ERROR]: Uknown operation\n"
+                   " Exiting the program...\n"
+                    );
+            exit(-1);
+        }
+
+        if (choice != 0) {
+            pause();
+        }
+    }
 }
 
 
@@ -379,7 +442,7 @@ int main(int argc, char *argv[])
             /* case 4: clear(); */
             /*     break; */
             case 5: clear();
-                searchByName(array, n);
+                searchMenu(array, n);
                 break;
             case 6: clear();
                 summary(array, n);
