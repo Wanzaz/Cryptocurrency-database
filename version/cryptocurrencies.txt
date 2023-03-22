@@ -8,6 +8,6 @@
 2014 XLM Jed-McCaleb 16.00
 2015 Tether Jan-Ludovicus-van-der-Velde 1.00
 2015 Ethereum Vitalik-Buterin 1705.19
-2017 Cardano Charles-Hoskinson 0.33
 2017 Bitcoin-Cash - 128.71
+2017 Cardano Charles-Hoskinson 0.33
 2021 SafeMoon SafeMoon-LLC 6.81
