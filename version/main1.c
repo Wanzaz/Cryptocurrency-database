@@ -308,9 +308,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    /* TCryptocurrency array[MAX]; */
-
-    TCryptocurrency* array = (TCryptocurrency*) malloc(sizeof(TCryptocurrency) * 100);
+    TCryptocurrency* array = (TCryptocurrency*) malloc(sizeof(TCryptocurrency) * MAX);
 
 
 
