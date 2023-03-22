@@ -103,7 +103,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     return array;
 }
 
-void writeCryptocurrencies(FILE *output, TArrayOfCrypto * crypto)
+void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)
 {
     for (int i = 0; i < crypto->lenght; i++) {
             fprintf(output, "%d %s %s %.2f\n",
@@ -116,7 +116,23 @@ void writeCryptocurrencies(FILE *output, TArrayOfCrypto * crypto)
 
 
 
-/*************** SORTING FUNCTIONS - BY YEAR AND LENGTH OF NAME ***************/
+/*************** SORTING FUNCTIONS - BY YEAR AND NAME ***************/
+
+typedef enum _CompareType
+{
+    ByFoundationYear = 1,
+    ByName = 0, // alphabetically
+} CompareType;
+
+int compare(TCryptocurrency x, TCryptocurrency y, CompareType type)
+{
+    switch (type) {
+        case ByFoundationYear:
+            return x.foundation_year - y.foundation_year;
+        case ByName:
+            return strcmp(x.name, y.name);
+  }
+}
 
 // function to swap elements
 void swap(TCryptocurrency array[], int x, int y)
@@ -128,7 +144,7 @@ void swap(TCryptocurrency array[], int x, int y)
 
 // function to find the partition position
 static inline
-int partition(TCryptocurrency array[], int start, int end)
+int partition(TCryptocurrency array[], int start, int end, CompareType type)
 {
 	int p = (start + end)/2; // or other selection
 	TCryptocurrency pivot = array[p];
@@ -138,10 +154,10 @@ int partition(TCryptocurrency array[], int start, int end)
 	int right = end + 1;
 
 	while (true) {
-		while (array[++left].foundation_year < pivot.foundation_year) {
+		while (compare(array[++left], pivot, type) < 0) {
 			if (left == end) break; // find element >= pivot
 		}
-		while (pivot.foundation_year < array[--right].foundation_year) {
+		while (compare(pivot, array[--right], type) < 0) {
 			// this line doesn't have to be here - it shouldn't be executed in any time
 			/* if (left == end) break; // find element >= pivot */ 
 		}
@@ -155,14 +171,14 @@ int partition(TCryptocurrency array[], int start, int end)
 	return right;
 }
 
-void quickSort(TCryptocurrency array[], int start, int end)
+void quickSort(TCryptocurrency array[], int start, int end, CompareType type)
 {
 	if (start >= end) return;
 
-	int pivot_position = partition(array, start, end);
+	int pivot_position = partition(array, start, end, type);
 
-	quickSort(array, start, pivot_position - 1);
-	quickSort(array, pivot_position + 1, end);
+	quickSort(array, start, pivot_position - 1, type);
+	quickSort(array, pivot_position + 1, end, type);
 }
 
 bool isSortedByFoundationYear(TArrayOfCrypto *crypto)
@@ -175,70 +191,11 @@ bool isSortedByFoundationYear(TArrayOfCrypto *crypto)
     return true;
 }
 
-void sortByFoundationYear(FILE *output, TArrayOfCrypto *crypto)
+void sort(FILE *output, TArrayOfCrypto *crypto, CompareType type)
 {
-    quickSort(crypto->value, 0, crypto->lenght - 1);
+    quickSort(crypto->value, 0, crypto->lenght - 1, type);
     rewind(output);
     writeCryptocurrencies(output, crypto);
-    writeCryptocurrencies(stdout, crypto);
-    printf("\n\n[DATABASE SORTED BY A FOUNDATION YEAR]: %s\n", isSortedByFoundationYear(crypto) ? "YES" : "NO");
-}
-
-
-static inline
-int partitionString(TCryptocurrency array[], int start, int end)
-{
-	int p = (start + end)/2; // or other selection
-	TCryptocurrency pivot = array[p];
-	swap(array, p, start); // pivot removal on site
-
-	int left = start;
-	int right = end + 1;
-
-	while (true) {
-		while (strlen(array[++left].founder_name) < strlen(pivot.founder_name)) {
-			if (left == end) break; // find element >= pivot
-		}
-		while (strlen(pivot.founder_name) < strlen(array[--right].founder_name)) {
-			// this line doesn't have to be here - it shouldn't be executed in any time
-			/* if (left == end) break; // find element >= pivot */ 
-		}
-
-		if (left >= right) break;
-
-		swap(array,left, right);
-	} // while
-	
-	swap(array, right, start); // inserting pivot on final position
-	return right;
-}
-
-void quickSortString(TCryptocurrency array[], int start, int end)
-{
-	if (start >= end) return;
-
-	int pivot_position = partitionString(array, start, end);
-
-	quickSortString(array, start, pivot_position - 1);
-	quickSortString(array, pivot_position + 1, end);
-}
-
-
-bool isSortedByFounderNameLength(TArrayOfCrypto *crypto)
-{
-    for (int i = 0; i < crypto->lenght - 1; i++) {
-        if (strlen(crypto->value[i].founder_name) > strlen(crypto->value[i + 1].founder_name)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void sortByFounderNameLength(FILE *output, TArrayOfCrypto *crypto)
-{
-    quickSortString(crypto->value, 0, crypto->lenght - 1);
-    writeCryptocurrencies(output, crypto);
-    printf("\n\n[DATABASE SORTED BY THE FOUNDER NAME'S LENGTH]: %s\n", isSortedByFounderNameLength(crypto) ? "YES" : "NO");
 }
 
 
@@ -298,11 +255,10 @@ void mainMenu()
         /* "\t4 - change a record\n" */
         "\t5 - summary\n"
         "\t6 - sort by a foundation year\n"
-        "\t7 - sort by a founder name's length\n"
+        "\t7 - sort by a cryptocurrency name alphabetically\n"
         "\t8 - see the OGs (which were founded before year 2014)\n"
         "Choose an operation: "
 	);
-
 }
 
 
@@ -345,10 +301,10 @@ int main(int argc, char *argv[])
                 summary(crypto);
                 break;
             case 6: clear();
-                sortByFoundationYear(database, crypto);
+                sort(stdout, crypto, ByFoundationYear);
                 break;
             case 7: clear();
-                sortByFounderNameLength(stdout, crypto);
+                sort(stdout, crypto, ByName); // alphabetically
                 break;
             case 8: clear();
                     theOGs(stdout, crypto);
@@ -373,3 +329,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
