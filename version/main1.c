@@ -308,7 +308,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    TCryptocurrency array[MAX];
+    /* TCryptocurrency array[MAX]; */
+
+    TCryptocurrency* array = (TCryptocurrency*) malloc(sizeof(TCryptocurrency) * 100);
+
+
+
     char *inputpath = argv[1];
 
     FILE *database = fopen(inputpath, "r+");
@@ -359,7 +364,9 @@ int main(int argc, char *argv[])
             pause();
         }
     }
+
     fclose(database);
+    free(array);
 
     return 0;
 }
