@@ -70,6 +70,8 @@ void clear(void)
 
 /*************** LOADING AND WRITING OUT ***************/
 
+// chybovy kod pri erroru syntaxtyicek chybe v souboru
+
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 {
     TArrayOfCrypto * array = malloc(sizeof(TArrayOfCrypto));
@@ -212,6 +214,8 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
     return sum/(crypto->lenght - 1);
 }
 
+// rozdelit funkce max, min do jednotlivych funkci
+
 void summary(TArrayOfCrypto *crypto)
 {
     int average = averageFoundationYear(crypto);
@@ -228,6 +232,8 @@ void summary(TArrayOfCrypto *crypto)
 
 
 /*************** FILTER FUNCTION ***************/
+
+// vratit tabulku dat jako pole
 
 void theOGs(FILE *output, TArrayOfCrypto *crypto)
 {
@@ -265,6 +271,8 @@ void mainMenu()
 
 /*************** MAIN ***************/
 
+// oddelat clang
+
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
@@ -286,6 +294,8 @@ int main(int argc, char *argv[])
     while (choice != 0) {
         mainMenu();
         scanf("%d", &choice);
+        // kontrolovat scanf jestli 1 a jestli 0 tak neco
+        // samostatna funkce 
         
         switch(choice) {
             case 1: clear();
