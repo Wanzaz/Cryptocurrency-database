@@ -112,6 +112,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     if (checking < 4 && checking >= 0) {
         printf("[SYNTAX ERROR] while loading data from a database\n"
                "\tCorrect the format of the data\n");
+        exit(-3);
     }
 
     array->value = realloc(array->value, i * sizeof(TCryptocurrency));
@@ -228,19 +229,24 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
     return sum/(crypto->lenght - 1);
 }
 
-// rozdelit funkce max, min do jednotlivych funkci
+int oldest(TArrayOfCrypto *crypto)
+{
+    return crypto->value[crypto->lenght - 1].foundation_year;
+}
+
+int youngest(TArrayOfCrypto *crypto)
+{
+    return crypto->value[0].foundation_year;
+}
 
 void summary(TArrayOfCrypto *crypto)
 {
-    int average = averageFoundationYear(crypto);
-    int youngest = crypto->value[0].foundation_year;
-    int oldest = crypto->value[crypto->lenght - 1].foundation_year;
     printf("[SUMMARY]:\n"
            "The number of records: %d\n"
            "The average year of foundation: %d\n"
            "The youngest cryptocurrency was founded in year: %d\n"
            "The oldest cryptocurrency was founded in year: %d\n"
-           , crypto->lenght, average, youngest, oldest);
+           , crypto->lenght, averageFoundationYear(crypto), youngest(crypto), oldest(crypto));
 }
 
 
@@ -299,53 +305,55 @@ int main(int argc, char *argv[])
     FILE *database = fopen(inputpath, "r+");
     if (database == NULL) return -1;
 
+
+    // Warning a user if the data were unsuccessfully loaded from the database
     TArrayOfCrypto * crypto = loadCryptocurrencies(database);
     if (crypto == NULL) return -2;
 
-
     int choice = 1;
 
-    /* while (choice != 0) { */
-    /*     mainMenu(); */
-    /*     scanf("%d", &choice); */
-    /*     // kontrolovat scanf jestli 1 a jestli 0 tak neco */
-    /*     // samostatna funkce */ 
-        
-    /*     switch(choice) { */
-    /*         case 1: clear(); */
-    /*             writeCryptocurrencies(stdout, crypto); */
-    /*             break; */
-    /*         /1* case 2: clear(); *1/ */
-    /*         /1*     break; *1/ */
-    /*         /1* case 3: clear(); *1/ */
-    /*         /1*     break; *1/ */
-    /*         /1* case 4: clear(); *1/ */
-    /*         /1*     break; *1/ */
-    /*         case 5: clear(); */
-    /*             summary(crypto); */
-    /*             break; */
-    /*         case 6: clear(); */
-    /*             sort(stdout, crypto, ByFoundationYear); */
-    /*             break; */
-    /*         case 7: clear(); */
-    /*             sort(stdout, crypto, ByName); // alphabetically */
-    /*             break; */
-    /*         case 8: clear(); */
-    /*                 theOGs(stdout, crypto); */
-    /*             break; */
-    /*     } */
-        
-    /*     if (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6 && choice != 7 && choice != 8) { */
-    /*         printf("\n[ERROR]: Uknown operation\n" */
-    /*                " Exiting the program...\n" */
-    /*                 ); */
-    /*         exit(-1); */
-    /*     } */
+    while (choice != 0) {
+        mainMenu();
 
-    /*     if (choice != 0) { */
-    /*         pause(); */
-    /*     } */
-    /* } */
+        scanf("%d", &choice);
+        // kontrolovat scanf jestli 1 a jestli 0 tak neco
+        // samostatna funkce 
+        
+        switch(choice) {
+            case 1: clear();
+                writeCryptocurrencies(stdout, crypto);
+                break;
+            /* case 2: clear(); */
+            /*     break; */
+            /* case 3: clear(); */
+            /*     break; */
+            /* case 4: clear(); */
+            /*     break; */
+            case 5: clear();
+                summary(crypto);
+                break;
+            case 6: clear();
+                sort(stdout, crypto, ByFoundationYear);
+                break;
+            case 7: clear();
+                sort(stdout, crypto, ByName); // alphabetically
+                break;
+            case 8: clear();
+                    theOGs(stdout, crypto);
+                break;
+        }
+        
+        if (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6 && choice != 7 && choice != 8) {
+            printf("\n[ERROR]: Uknown operation\n"
+                   " Exiting the program...\n"
+                    );
+            exit(-1);
+        }
+
+        if (choice != 0) {
+            pause();
+        }
+    }
 
     fclose(database);
     free(crypto->value);
