@@ -302,13 +302,11 @@ void mainMenu()
 
 /*************** MAIN ***************/
 
-// oddelat clang
-
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
-        printf("ERROR: Program should be executed like this:\n"
-               "\tclang main.c;./a.out inputfile\n");
+        printf("[ERROR]: Program should be executed like this:\n"
+               "\t./a.out inputfile\n");
         return -1;
     }
 
