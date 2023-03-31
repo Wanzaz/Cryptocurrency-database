@@ -253,16 +253,27 @@ void summary(TArrayOfCrypto *crypto)
 
 /*************** FILTER FUNCTION ***************/
 
-// vratit tabulku dat jako pole
-
-void theOGs(FILE *output, TArrayOfCrypto *crypto)
+void foundedBeforeYear(FILE *output, TArrayOfCrypto *crypto, int before_year)
 {
-    printf("[THE OG CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR 2014]:\n");
+    printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
     for (int i = 0; i < crypto->lenght - 1; i++) {
-        if (crypto->value[i].foundation_year < 2014) {
-            fprintf(output, " %s\n", crypto->value[i].name);
+        if (crypto->value[i].foundation_year < before_year) {
+            fprintf(output, "%d %s %s %.2f\n",
+                crypto->value[i].foundation_year,
+                crypto->value[i].name,
+                crypto->value[i].founder_name,
+                crypto->value[i].price);
         }
     }
+}
+
+void beforeYear(FILE *output, TArrayOfCrypto *crypto)
+{
+    int before_year;
+    printf("By which year do you wanna see the founded cryptocurrencies: \n");
+    scanf("%i", &before_year);
+    clear();
+    foundedBeforeYear(output, crypto, before_year);
 }
 
 
@@ -339,7 +350,7 @@ int main(int argc, char *argv[])
                 sort(stdout, crypto, ByName); // alphabetically
                 break;
             case 8: clear();
-                    theOGs(stdout, crypto);
+                    beforeYear(stdout, crypto);
                 break;
         }
         
