@@ -122,6 +122,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 
 void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)
 {
+    rewind(output);
     for (int i = 0; i < crypto->lenght; i++) {
             fprintf(output, "%d %s %s %.2f\n",
                 crypto->value[i].foundation_year,
@@ -306,12 +307,22 @@ void searchByName(TArrayOfCrypto *crypto)
 
 
 
-/*************** REMOVE, ADD RECORD  ***************/
+/*************** BACKUP ***************/
 
-void addRecord(FILE *output, TArrayOfCrypto *crypto, CompareType type)
+void dataBackup(FILE *output, TArrayOfCrypto *crypto)
+{
+    printf("[INFO]: Data were successfully backed up.\n");
+    writeCryptocurrencies(output, crypto);
+}
+
+
+
+/*************** ADD, CHANGE, REMOVE RECORD  ***************/
+
+void addRecord(FILE *output, TArrayOfCrypto *crypto)
 {
     TCryptocurrency new_cryptocurrency;
-    printf("Enter info in format: foundation_year name founder_name price\n");
+    printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
     if (scanf("%d %40s %40s %f", 
                 &new_cryptocurrency.foundation_year,
                 new_cryptocurrency.name,
@@ -321,38 +332,67 @@ void addRecord(FILE *output, TArrayOfCrypto *crypto, CompareType type)
         crypto->value[crypto->lenght] = new_cryptocurrency;
         crypto->lenght++;
 
-        sort(output, crypto, type);
         printf("[INFO]: Record was successfully added.\n\n\n");
-        writeCryptocurrencies(stdout, crypto);
+        writeCryptocurrencies(output, crypto);
         
     } else {
         printf("[ERROR]: Information in a wrong format.\n");
     }
 }
 
-/* void removeRecord(FILE *output, TArrayOfCrypto *crypto, CompareType type) */
-/* { */
-/*     TCryptocurrency new_cryptocurrency; */
-/*     printf("Enter info in format: foundation_year name founder_name price\n"); */
-/*     if (scanf("%d %40s %40s %f", */ 
-/*                 &new_cryptocurrency.foundation_year, */
-/*                 new_cryptocurrency.name, */
-/*                 new_cryptocurrency.founder_name, */
-/*                 &new_cryptocurrency.price) == 4) { */
+void changeRecord(FILE *output, TArrayOfCrypto *crypto)
+{
+    int index;
+    writeCryptocurrencies(stdout, crypto);
 
-/*         crypto->value[crypto->lenght] = new_cryptocurrency; */
-/*         crypto->lenght++; */
+    printf("\n\n[INSTRUCTION]: Enter record index which you wanna change: \n");
+    scanf("%d", &index);
 
-/*         sort(output, crypto, type); */
-/*         printf("[INFO]: Record was successfully added.\n\n\n"); */
-/*         writeCryptocurrencies(stdout, crypto); */
-        
-/*     } else { */
-/*         printf("[ERROR]: Information in a wrong format.\n"); */
-/*     } */
+    if (index >= 0 && index < crypto->lenght) {
+        TCryptocurrency new_cryptocurrency;
+        printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
 
+        if (scanf("%d %40s %40s %f", 
+                    &new_cryptocurrency.foundation_year,
+                    new_cryptocurrency.name,
+                    new_cryptocurrency.founder_name,
+                    &new_cryptocurrency.price) == 4) {
 
-/* } */
+            crypto->value[index] = new_cryptocurrency;
+
+        } else {
+            printf("[ERROR]: Information in a wrong format.\n");
+        }
+
+    } else {
+        printf("[ERROR]: Wrong index.\n");
+    }
+    printf("[INFO]: Record was successfully changed.\n\n\n");
+    writeCryptocurrencies(output, crypto);
+}
+
+void removeRecord(FILE *output, TArrayOfCrypto *crypto)
+{
+    int index;
+    writeCryptocurrencies(stdout, crypto);
+
+    printf("\n\n[INSTRUCTION]: Enter record index which you wanna delete: \n");
+    scanf("%d", &index);
+
+    if (index >= 0 && index < crypto->lenght) {
+        for (int i = index; i < crypto->lenght - 1; i++) {
+            crypto->value[i] = crypto->value[i + 1];
+        }
+
+        crypto->lenght--;
+        printf("[INFO]: Record was successfully deleted.\n\n\n");
+        writeCryptocurrencies(output, crypto);
+    
+    } else {
+        printf("[ERROR]: Wrong index.\n");
+    }
+}
+
 
 
 /*************** MENUs ***************/
@@ -377,13 +417,14 @@ void mainMenu()
         "\t0 - exit\n"
         "\t1 - write out a whole database\n"
         "\t2 - add a record\n"
-        "\t3 - remove a record\n"
-        "\t4 - change a record\n"
+        "\t3 - change a record\n"
+        "\t4 - remove a record\n"
         "\t5 - search data by a cryptocurrency name\n"
         "\t6 - sort by a foundation year\n"
         "\t7 - sort by a cryptocurrency name alphabetically\n"
         "\t8 - filter data by a foundation year\n"
         "\t9 - summary\n"
+        "\t10 - data backup\n"
         "Choose an operation: "
 	);
 }
@@ -400,6 +441,8 @@ void exitProgram()
 // TODO 
 // - enum for error returns
 // - lower_case_names 
+// - add ID to every item
+// - error with wrong format
 
 int main(int argc, char *argv[])
 {
@@ -426,18 +469,18 @@ int main(int argc, char *argv[])
         
         switch(choice) {
             case 0: clear();
-                    exitProgram();
+                exitProgram();
             case 1: clear();
                 writeCryptocurrencies(stdout, crypto);
                 break;
             case 2: clear();
-                addRecord(database, crypto, ByFoundationYear);
+                addRecord(stdout, crypto);
                 break;
             case 3: clear();
-                // CHANGE
+                changeRecord(stdout, crypto);
                 break;
             case 4: clear();
-                // REMOVE
+                removeRecord(stdout, crypto);
                 break;
             case 5: clear();
                 searchByName(crypto);
@@ -453,6 +496,9 @@ int main(int argc, char *argv[])
                 break;
             case 9: clear();
                 summary(crypto);
+                break;
+            case 10: clear();
+                dataBackup(database, crypto);
                 break;
         }
             pause();
