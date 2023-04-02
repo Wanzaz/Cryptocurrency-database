@@ -22,6 +22,14 @@ zda nepřesáhnete velikost pole. Pokud přesáhnete, další položky z pole ne
 3. Zkontrolujte, že vám ostatní funkce pracují bez chyby. 
 Měla by tam být funkce pro souhrn (počet, min, max, sum) a jednoduchý filtr.
 
+
+Do cvičení si přineste projekt. 
+Pokud pracujete  se seznamem dat doplňte si vyhledávání podle určité položky (aspoň jedné).
+Také doplňte mazání položky.  
+Mazání může být fyzické nebo logické (příznak smazáno).  
+Mělo by vám také fungovat zálohování. 
+Projekt by měl být už ve finální verzi.
+
 **/
 
 
@@ -79,7 +87,6 @@ int load(FILE *input, TCryptocurrency a[], int max_length)
         i++;
     }
 
-    /* rewind(input); */
     return i;
 }
 
@@ -336,10 +343,37 @@ void searchByFoundationYear(TCryptocurrency array[], int n)
     }
 
     if (found == 0) {
-        printf("Item wasn't found.\n");
+        printf("[ERROR]: Item wasn't found.\n");
     }
     
 }
+
+
+
+/*************** ADDING, CHANGING, REMOVING ***************/
+
+void addRecord(FILE *output, TCryptocurrency array[], int *n)
+{
+    TCryptocurrency new_cryptocurrency;
+    printf("Enter info in format: foundation_year name founder_name price\n");
+    if (scanf("%d %40s %40s %f", 
+                &new_cryptocurrency.foundation_year,
+                new_cryptocurrency.name,
+                new_cryptocurrency.founder_name,
+                &new_cryptocurrency.price) == 4) {
+
+        *n++; /* *n = *n + 1; */
+        array[*n] = new_cryptocurrency;
+
+        sortByFoundationYear(stdout, array, *n);
+        writeOutOfWholeDatabase(stdout, array, *n);
+        
+    } else {
+        printf("[ERROR]: Information in a wrong format.\n");
+    }
+
+}
+
 
 
 /*************** MENUs ***************/
@@ -351,7 +385,7 @@ void mainMenu()
         "Cryptocurrency Database Program:\n"
         "\t0 - exit\n"
         "\t1 - write out a whole database\n"
-        /* "\t2 - add a record\n" */
+        "\t2 - add a record\n"
         /* "\t3 - remove a record\n" */
         /* "\t4 - change a record\n" */
         "\t5 - search for element\n"
@@ -435,8 +469,9 @@ int main(int argc, char *argv[])
             case 1: clear();
                 writeOutOfWholeDatabase(stdout, array, n);
                 break;
-            /* case 2: clear(); */
-            /*     break; */
+            case 2: clear();
+                addRecord(stdout, array, &n);
+                break;
             /* case 3: clear(); */
             /*     break; */
             /* case 4: clear(); */
