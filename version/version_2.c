@@ -110,7 +110,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     }
 
     if (checking < 4 && checking >= 0) {
-        printf("[SYNTAX ERROR] while loading data from a database\n"
+        printf("[SYNTAX ERROR]: while loading data from a database\n"
                "\tCorrect the format of the data\n");
         exit(-3);
     }
@@ -270,7 +270,7 @@ void foundedBeforeYear(FILE *output, TArrayOfCrypto *crypto, int before_year)
 void beforeYear(FILE *output, TArrayOfCrypto *crypto)
 {
     int before_year;
-    printf("By which year do you wanna see the founded cryptocurrencies: \n");
+    printf("[INSTRUCTION]: By which year do you wanna see the founded cryptocurrencies: \n");
     scanf("%i", &before_year);
     clear();
     foundedBeforeYear(output, crypto, before_year);
@@ -280,28 +280,78 @@ void beforeYear(FILE *output, TArrayOfCrypto *crypto)
 
 /*************** SEARCHING ***************/
 
-/* void searchByName(TArrayOfCrypto *crypto) */
+void searchByName(TArrayOfCrypto *crypto)
+{
+    int i = 0;
+    int found = 0;
+    char searched_name[41];
+    printf("[INSTRUCTION]: Enter a name of searched cryptocurrency: \n");
+    scanf("%40s", searched_name);
+
+    for (int i = 0; i < crypto->lenght; i++) {
+        if (strcmp(crypto->value[i].name, searched_name) == 0) {
+            printf("%d %s %s %.2f\n",
+                crypto->value[i].foundation_year,
+                crypto->value[i].name,
+                crypto->value[i].founder_name,
+                crypto->value[i].price);
+            found++;
+        }
+    }
+
+    if (found == 0) {
+        printf("[ERROR]: Item wasn't found.\n");
+    }
+}
+
+
+
+/*************** REMOVE, ADD RECORD  ***************/
+
+void addRecord(FILE *output, TArrayOfCrypto *crypto, CompareType type)
+{
+    TCryptocurrency new_cryptocurrency;
+    printf("Enter info in format: foundation_year name founder_name price\n");
+    if (scanf("%d %40s %40s %f", 
+                &new_cryptocurrency.foundation_year,
+                new_cryptocurrency.name,
+                new_cryptocurrency.founder_name,
+                &new_cryptocurrency.price) == 4) {
+
+        crypto->value[crypto->lenght] = new_cryptocurrency;
+        crypto->lenght++;
+
+        sort(output, crypto, type);
+        printf("[INFO]: Record was successfully added.\n\n\n");
+        writeCryptocurrencies(stdout, crypto);
+        
+    } else {
+        printf("[ERROR]: Information in a wrong format.\n");
+    }
+}
+
+/* void removeRecord(FILE *output, TArrayOfCrypto *crypto, CompareType type) */
 /* { */
-/*     int i = 0; */
-/*     int found = 0; */
-/*     char searched_name[41]; */
-/*     printf("Enter a name of searched cryptocurrency: "); */
-/*     scanf("%40s", searched_name); */
+/*     TCryptocurrency new_cryptocurrency; */
+/*     printf("Enter info in format: foundation_year name founder_name price\n"); */
+/*     if (scanf("%d %40s %40s %f", */ 
+/*                 &new_cryptocurrency.foundation_year, */
+/*                 new_cryptocurrency.name, */
+/*                 new_cryptocurrency.founder_name, */
+/*                 &new_cryptocurrency.price) == 4) { */
 
-/*     for (int i = 0; i < crypto->lenght; i++) { */
-/*         if (strcmp(crypto->value[i].name, searched_name) == 0) { */
-/*             printf("%d %s %s %.2f\n", */
-/*                 crypto->value[i].foundation_year, */
-/*                 crypto->value[i].name, */
-/*                 crypto->value[i].founder_name, */
-/*                 crypto->value[i].price); */
-/*             found++; */
-/*         } */
+/*         crypto->value[crypto->lenght] = new_cryptocurrency; */
+/*         crypto->lenght++; */
+
+/*         sort(output, crypto, type); */
+/*         printf("[INFO]: Record was successfully added.\n\n\n"); */
+/*         writeCryptocurrencies(stdout, crypto); */
+        
+/*     } else { */
+/*         printf("[ERROR]: Information in a wrong format.\n"); */
 /*     } */
 
-/*     if (found == 0) { */
-/*         printf("Item wasn't found.\n"); */
-/*     } */
+
 /* } */
 
 
@@ -326,28 +376,30 @@ void mainMenu()
         "Cryptocurrency Database Program:\n"
         "\t0 - exit\n"
         "\t1 - write out a whole database\n"
-        /* "\t2 - add a record\n" */
-        /* "\t3 - remove a record\n" */
-        /* "\t4 - change a record\n" */
-        "\t5 - summary\n"
+        "\t2 - add a record\n"
+        "\t3 - remove a record\n"
+        "\t4 - change a record\n"
+        "\t5 - search data by a cryptocurrency name\n"
         "\t6 - sort by a foundation year\n"
         "\t7 - sort by a cryptocurrency name alphabetically\n"
         "\t8 - filter data by a foundation year\n"
-        "\t9 - search data by a cryptocurrency name\n"
+        "\t9 - summary\n"
         "Choose an operation: "
 	);
 }
 
 void exitProgram()
 {
-    printf("The program was terminated by the user\n");
+    printf("[INFO]: The program was terminated by the user\n");
     exit(-5);
 }
 
 
 
 /*************** MAIN ***************/
-// TODO - enum for error returns
+// TODO 
+// - enum for error returns
+// - lower_case_names 
 
 int main(int argc, char *argv[])
 {
@@ -378,14 +430,17 @@ int main(int argc, char *argv[])
             case 1: clear();
                 writeCryptocurrencies(stdout, crypto);
                 break;
-            /* case 2: clear(); */
-            /*     break; */
-            /* case 3: clear(); */
-            /*     break; */
-            /* case 4: clear(); */
-            /*     break; */
+            case 2: clear();
+                addRecord(database, crypto, ByFoundationYear);
+                break;
+            case 3: clear();
+                // CHANGE
+                break;
+            case 4: clear();
+                // REMOVE
+                break;
             case 5: clear();
-                summary(crypto);
+                searchByName(crypto);
                 break;
             case 6: clear();
                 sort(stdout, crypto, ByFoundationYear);
@@ -394,7 +449,10 @@ int main(int argc, char *argv[])
                 sort(stdout, crypto, ByName); // alphabetically
                 break;
             case 8: clear();
-                    beforeYear(stdout, crypto);
+                beforeYear(stdout, crypto);
+                break;
+            case 9: clear();
+                summary(crypto);
                 break;
         }
             pause();
