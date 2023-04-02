@@ -278,7 +278,46 @@ void beforeYear(FILE *output, TArrayOfCrypto *crypto)
 
 
 
+/*************** SEARCHING ***************/
+
+/* void searchByName(TArrayOfCrypto *crypto) */
+/* { */
+/*     int i = 0; */
+/*     int found = 0; */
+/*     char searched_name[41]; */
+/*     printf("Enter a name of searched cryptocurrency: "); */
+/*     scanf("%40s", searched_name); */
+
+/*     for (int i = 0; i < crypto->lenght; i++) { */
+/*         if (strcmp(crypto->value[i].name, searched_name) == 0) { */
+/*             printf("%d %s %s %.2f\n", */
+/*                 crypto->value[i].foundation_year, */
+/*                 crypto->value[i].name, */
+/*                 crypto->value[i].founder_name, */
+/*                 crypto->value[i].price); */
+/*             found++; */
+/*         } */
+/*     } */
+
+/*     if (found == 0) { */
+/*         printf("Item wasn't found.\n"); */
+/*     } */
+/* } */
+
+
 /*************** MENUs ***************/
+
+int checkingForUserChoice()
+{
+    int choice, check;
+    if ((check = scanf("%i", &choice) != 1)) {
+        printf("\n[ERROR]: Uknown operation\n"
+               " Exiting the program...\n");
+        exit(-4);
+        return -4;
+    }
+    return choice;
+}
 
 void mainMenu()
 {
@@ -293,14 +332,22 @@ void mainMenu()
         "\t5 - summary\n"
         "\t6 - sort by a foundation year\n"
         "\t7 - sort by a cryptocurrency name alphabetically\n"
-        "\t8 - see the OGs (which were founded before year 2014)\n"
+        "\t8 - filter data by a foundation year\n"
+        "\t9 - search data by a cryptocurrency name\n"
         "Choose an operation: "
 	);
+}
+
+void exitProgram()
+{
+    printf("The program was terminated by the user\n");
+    exit(-5);
 }
 
 
 
 /*************** MAIN ***************/
+// TODO - enum for error returns
 
 int main(int argc, char *argv[])
 {
@@ -320,15 +367,14 @@ int main(int argc, char *argv[])
     if (crypto == NULL) return -2;
 
     int choice = 1;
-
-    while (choice != 0) {
+    while (choice != -4) {
         mainMenu();
 
-        scanf("%d", &choice);
-        // kontrolovat scanf jestli 1 a jestli 0 tak neco
-        // samostatna funkce 
+        int choice = checkingForUserChoice();
         
         switch(choice) {
+            case 0: clear();
+                    exitProgram();
             case 1: clear();
                 writeCryptocurrencies(stdout, crypto);
                 break;
@@ -351,17 +397,7 @@ int main(int argc, char *argv[])
                     beforeYear(stdout, crypto);
                 break;
         }
-        
-        if (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6 && choice != 7 && choice != 8) {
-            printf("\n[ERROR]: Uknown operation\n"
-                   " Exiting the program...\n"
-                    );
-            exit(-1);
-        }
-
-        if (choice != 0) {
             pause();
-        }
     }
 
     fclose(database);
