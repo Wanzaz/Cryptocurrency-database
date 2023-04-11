@@ -499,6 +499,7 @@ int main(int argc, char *argv[])
                 break;
             case 10: clear();
                 dataBackup(database, crypto);
+                printf("%d\n", crypto->lenght);
                 break;
         }
             pause();
