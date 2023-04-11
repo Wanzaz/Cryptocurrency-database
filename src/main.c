@@ -371,7 +371,24 @@ void changeRecord(FILE *output, TArrayOfCrypto *crypto)
     writeCryptocurrencies(output, crypto);
 }
 
-void removeRecord(FILE *output, TArrayOfCrypto *crypto)
+int removeBackup(TArrayOfCrypto *crypto, char inputpath[])
+{
+    FILE *database = fopen(inputpath, "w");
+    if (database == NULL) return -1;
+
+    for (int i = 0; i < crypto->lenght; i++) {
+        fprintf(database, "%d %s %s %.2f\n",
+            crypto->value[i].foundation_year,
+            crypto->value[i].name,
+            crypto->value[i].founder_name,
+            crypto->value[i].price);
+    }
+
+    fclose(database);
+    return 0;
+}
+
+void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 {
     int index;
     writeCryptocurrencies(stdout, crypto);
@@ -391,6 +408,8 @@ void removeRecord(FILE *output, TArrayOfCrypto *crypto)
     } else {
         printf("[ERROR]: Wrong index.\n");
     }
+
+    removeBackup(crypto, inputpath);
 }
 
 
@@ -480,7 +499,7 @@ int main(int argc, char *argv[])
                 changeRecord(stdout, crypto);
                 break;
             case 4: clear();
-                removeRecord(stdout, crypto);
+                removeRecord(stdout, crypto, inputpath);
                 break;
             case 5: clear();
                 searchByName(crypto);
@@ -499,7 +518,7 @@ int main(int argc, char *argv[])
                 break;
             case 10: clear();
                 dataBackup(database, crypto);
-                printf("%d\n", crypto->lenght);
+                printf("\n%d records were saved.\n", crypto->lenght);
                 break;
         }
             pause();
