@@ -319,6 +319,7 @@ void dataBackup(FILE *output, TArrayOfCrypto *crypto)
 
 /*************** ADD, CHANGE, REMOVE RECORD  ***************/
 
+// kontrolovat maximum pole pri pridani prvku
 void addRecord(FILE *output, TArrayOfCrypto *crypto)
 {
     TCryptocurrency new_cryptocurrency;
@@ -388,6 +389,7 @@ int removeBackup(TArrayOfCrypto *crypto, char inputpath[])
     return 0;
 }
 
+// vyhledavat a pak smazat
 void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 {
     int index;
@@ -462,6 +464,7 @@ void exitProgram()
 // - lower_case_names 
 // - add ID to every item
 // - error with wrong format
+// - make it more generic
 
 int main(int argc, char *argv[])
 {
