@@ -77,6 +77,18 @@ void clear(void)
 
 
 /*************** LOADING AND WRITING OUT ***************/
+int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
+{
+    if (fscanf(input, "%d %40s %40s %f\n", 
+        &cryptocurrency->foundation_year,
+        cryptocurrency->name,
+        cryptocurrency->founder_name,
+        &cryptocurrency->price) == 4) {
+
+        return 0;
+    }
+    return -5;
+}
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 {
@@ -93,11 +105,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     int checking;
 
     while(i < MAXN && 
-            (checking = fscanf(file, "%d %40s %40s %f\n",
-                &cryptocurrency.foundation_year,
-                cryptocurrency.name,
-                cryptocurrency.founder_name,
-                &cryptocurrency.price)) == 4) {
+            (checking = loadOneCrypto(file, &cryptocurrency)) == 0) {
         if (i == array->lenght) {
             array->lenght += BLOCK;
             TCryptocurrency * temp = realloc(array->value, array->lenght * sizeof(TCryptocurrency));
@@ -132,6 +140,19 @@ void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)
     }
 }
 
+
+int printOneCrypto(FILE *file, TCryptocurrency *cryptocurrency)
+{
+    if (fprintf(file, "%d %s %s %f", 
+        cryptocurrency->foundation_year,
+        cryptocurrency->name,
+        cryptocurrency->founder_name,
+        cryptocurrency->price)) {
+
+        return 0;
+    }
+    return -5;
+}
 
 
 /*************** SORTING FUNCTIONS - BY YEAR AND NAME ***************/
@@ -324,11 +345,7 @@ void addRecord(FILE *output, TArrayOfCrypto *crypto)
 {
     TCryptocurrency new_cryptocurrency;
     printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
-    if (scanf("%d %40s %40s %f", 
-                &new_cryptocurrency.foundation_year,
-                new_cryptocurrency.name,
-                new_cryptocurrency.founder_name,
-                &new_cryptocurrency.price) == 4) {
+    if (loadOneCrypto(stdout, &new_cryptocurrency) == 0) {
 
         crypto->value[crypto->lenght] = new_cryptocurrency;
         crypto->lenght++;
@@ -353,12 +370,7 @@ void changeRecord(FILE *output, TArrayOfCrypto *crypto)
         TCryptocurrency new_cryptocurrency;
         printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
 
-        if (scanf("%d %40s %40s %f", 
-                    &new_cryptocurrency.foundation_year,
-                    new_cryptocurrency.name,
-                    new_cryptocurrency.founder_name,
-                    &new_cryptocurrency.price) == 4) {
-
+        if (loadOneCrypto(stdout, &new_cryptocurrency) == 0) {
             crypto->value[index] = new_cryptocurrency;
 
         } else {
