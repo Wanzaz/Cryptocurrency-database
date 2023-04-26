@@ -128,31 +128,23 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     return array;
 }
 
+void printOneCrypto(FILE *file, TCryptocurrency cryptocurrency)
+{
+    fprintf(file, "%d %s %s %.2f\n", 
+                cryptocurrency.foundation_year,
+                cryptocurrency.name,
+                cryptocurrency.founder_name,
+                cryptocurrency.price);
+}
+
 void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)
 {
     rewind(output);
     for (int i = 0; i < crypto->lenght; i++) {
-            fprintf(output, "%d %s %s %.2f\n",
-                crypto->value[i].foundation_year,
-                crypto->value[i].name,
-                crypto->value[i].founder_name,
-                crypto->value[i].price);
+        printOneCrypto(output, crypto->value[i]);
     }
 }
 
-
-int printOneCrypto(FILE *file, TCryptocurrency *cryptocurrency)
-{
-    if (fprintf(file, "%d %s %s %f", 
-        cryptocurrency->foundation_year,
-        cryptocurrency->name,
-        cryptocurrency->founder_name,
-        cryptocurrency->price)) {
-
-        return 0;
-    }
-    return -5;
-}
 
 
 /*************** SORTING FUNCTIONS - BY YEAR AND NAME ***************/
@@ -280,11 +272,7 @@ void foundedBeforeYear(FILE *output, TArrayOfCrypto *crypto, int before_year)
     printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
     for (int i = 0; i < crypto->lenght - 1; i++) {
         if (crypto->value[i].foundation_year < before_year) {
-            fprintf(output, "%d %s %s %.2f\n",
-                crypto->value[i].foundation_year,
-                crypto->value[i].name,
-                crypto->value[i].founder_name,
-                crypto->value[i].price);
+            printOneCrypto(output, crypto->value[i]);
         }
     }
 }
@@ -312,11 +300,7 @@ void searchByName(TArrayOfCrypto *crypto)
 
     for (int i = 0; i < crypto->lenght; i++) {
         if (strcmp(crypto->value[i].name, searched_name) == 0) {
-            printf("%d %s %s %.2f\n",
-                crypto->value[i].foundation_year,
-                crypto->value[i].name,
-                crypto->value[i].founder_name,
-                crypto->value[i].price);
+            printOneCrypto(stdout, crypto->value[i]);
             found++;
         }
     }
@@ -390,11 +374,7 @@ int removeBackup(TArrayOfCrypto *crypto, char inputpath[])
     if (database == NULL) return -1;
 
     for (int i = 0; i < crypto->lenght; i++) {
-        fprintf(database, "%d %s %s %.2f\n",
-            crypto->value[i].foundation_year,
-            crypto->value[i].name,
-            crypto->value[i].founder_name,
-            crypto->value[i].price);
+        printOneCrypto(database, crypto->value[i]);
     }
 
     fclose(database);
