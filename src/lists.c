@@ -15,14 +15,15 @@ int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
         cryptocurrency->name,
         cryptocurrency->founder_name,
         &cryptocurrency->price,
-        &temp) == 4) {
+        &temp) == 6) {
 
-        cryptocurrency->id = temp;
+        cryptocurrency->deleted = temp;
 
         return 0;
     }
     return -5;
 }
+
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 {
@@ -51,7 +52,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
         array->value[i++] = cryptocurrency;
     }
 
-    if (checking < 4 && checking >= 0) {
+    if (checking < 6 && checking >= 0) {
         printf("[SYNTAX ERROR]: while loading data from a database\n"
                "\tCorrect the format of the data\n");
         exit(-3);
@@ -64,11 +65,14 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 
 void printOneCrypto(FILE *file, TCryptocurrency cryptocurrency)
 {
-    fprintf(file, "%d %s %s %.2f\n", 
-                cryptocurrency.foundation_year,
-                cryptocurrency.name,
-                cryptocurrency.founder_name,
-                cryptocurrency.price);
+    if (!cryptocurrency.deleted) {
+        fprintf(file, "%d %d %s %s %.2f\n", 
+        cryptocurrency.id,
+        cryptocurrency.foundation_year,
+        cryptocurrency.name,
+        cryptocurrency.founder_name,
+        cryptocurrency.price);
+    }
 }
 
 void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)

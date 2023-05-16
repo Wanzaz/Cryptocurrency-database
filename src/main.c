@@ -3,6 +3,7 @@
 #include <string.h>  // for work with text strings
 #include <stdbool.h> // for work with type of bool and constants true and false
 #include "types.h"
+#include "filters.h"
 #include "actions.h"
 #include "helpers.h"
 #include "lists.h"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
                 exitProgram();
             case 1: clear();
                 writeCryptocurrencies(stdout, crypto);
+                printf("ahoj");
                 break;
             case 2: clear();
                 addRecord(stdout, crypto);
@@ -63,10 +65,10 @@ int main(int argc, char *argv[])
                 sort(stdout, crypto, ByName); // alphabetically
                 break;
             case 8: clear();
-                /* beforeYear(stdout, crypto); */
+                beforeYear(stdout, crypto);
                 break;
             case 9: clear();
-                /* summary(crypto); */
+                summary(crypto);
                 break;
             case 10: clear();
                 dataBackup(database, crypto);

@@ -9,23 +9,19 @@
 // kontrolovat maximum pole pri pridani prvku
 void addRecord(FILE *output, TArrayOfCrypto *crypto)
 {
-    /* TCryptocurrency new_cryptocurrency; */
-    /* printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n"); */
-    /* if (loadOneCrypto(stdout, &new_cryptocurrency) == 0) { */
+    TCryptocurrency new_cryptocurrency;
+    printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
+    if (loadOneCrypto(stdout, &new_cryptocurrency) == 0) {
 
-    /*     crypto->value[crypto->lenght] = new_cryptocurrency; */
-    /*     crypto->lenght++; */
+        crypto->value[crypto->lenght] = new_cryptocurrency;
+        crypto->lenght++;
 
-    /*     printf("[INFO]: Record was successfully added.\n\n\n"); */
-    /*     writeCryptocurrencies(output, crypto); */
+        printf("[INFO]: Record was successfully added.\n\n\n");
+        writeCryptocurrencies(output, crypto);
         
-    /* } else { */
-    /*     printf("[ERROR]: Information in a wrong format.\n"); */
-    /* } */
-
-    /* if () { */
-    
-    /* } */
+    } else {
+        printf("[ERROR]: Information in a wrong format.\n");
+    }
 }
 
 void changeRecord(FILE *output, TArrayOfCrypto *crypto)
@@ -95,7 +91,6 @@ void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 
 void searchByName(TArrayOfCrypto *crypto)
 {
-    int i = 0;
     int found = 0;
     char searched_name[41];
     printf("[INSTRUCTION]: Enter a name of searched cryptocurrency: \n");
