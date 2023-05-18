@@ -6,6 +6,7 @@
 #include "lists.h"
 #include "comparing.h"
 
+
 int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
 {
     int temp;
@@ -28,6 +29,7 @@ int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 {
     TArrayOfCrypto * array = malloc(sizeof(TArrayOfCrypto));
+    array->capacity = sizeof(TArrayOfCrypto);
     if (array == NULL) return NULL;
 
     array->value = NULL;

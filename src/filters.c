@@ -8,10 +8,21 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
 {
     int sum = 0;
     for (int i = 0; i < crypto->lenght - 1; i++) {
-        sum += crypto->value[i].foundation_year;
+        if (!crypto->value[i].deleted) {
+            sum += crypto->value[i].foundation_year;
+        }
     }
 
     return sum/(crypto->lenght - 1);
+}
+
+int lenghtOfNotDeletedCrypto(TArrayOfCrypto *crypto)
+{
+    int length;
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        
+    }
+
 }
 
 int oldest(TArrayOfCrypto *crypto)
@@ -42,7 +53,7 @@ void foundedBeforeYear(FILE *output, TArrayOfCrypto *crypto, int before_year)
 {
     printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
     for (int i = 0; i < crypto->lenght - 1; i++) {
-        if (crypto->value[i].foundation_year < before_year) {
+        if (crypto->value[i].foundation_year < before_year && (!crypto->value[i].id)) {
             printOneCrypto(output, crypto->value[i]);
         }
     }

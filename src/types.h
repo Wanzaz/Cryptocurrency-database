@@ -39,8 +39,8 @@ typedef struct _cryptocurrency {
  * */
 typedef struct _array {
     TCryptocurrency *value;
-
     int lenght;
+    int capacity;
 } TArrayOfCrypto;
 
 

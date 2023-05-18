@@ -11,10 +11,12 @@
 
 // TODO 
 // - enum for error returns
-// - lower_case_names 
 // - add ID to every item
 // - error with wrong format
 // - make it more generic
+// - optimize algorithm for searching
+// - add capacity to dynamic array
+//
 
 int main(int argc, char *argv[])
 {

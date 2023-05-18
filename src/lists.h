@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "types.h"
 
+#define MAXN 100
+#define BlOCK 32
+
 int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency);
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file);
