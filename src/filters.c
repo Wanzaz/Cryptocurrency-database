@@ -87,7 +87,7 @@ void foundedBeforeYear(TArrayOfCrypto *crypto)
     printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
     for (int i = 0; i < crypto->lenght - 1; i++) {
         if (crypto->value[i].foundation_year < before_year && (!crypto->value[i].deleted)) {
-            printOneCrypto(stdout, crypto->value[i]);
+            writeOne(stdout, crypto->value[i], DATA_FORMAT);
         }
     }
 }

@@ -11,12 +11,12 @@
 
 // TODO 
 // - enum for error returns
-// - add ID to every item
 // - error with wrong format
 // - make it more generic
 // - optimize algorithm for searching
 // - add capacity to dynamic array
-//
+
+
 
 int main(int argc, char *argv[])
 {
@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
             case 0: clear();
                 exitProgram();
             case 1: clear();
-                writeCryptocurrencies(stdout, crypto);
-                printf("ahoj");
+                print(crypto);
                 break;
             case 2: clear();
                 addRecord(stdout, crypto);

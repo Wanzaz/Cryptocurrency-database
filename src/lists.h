@@ -7,13 +7,18 @@
 #define MAXN 100
 #define BlOCK 32
 
-int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency);
+int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format);
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file);
 
-void printOneCrypto(FILE *file, TCryptocurrency cryptocurrency);
+void write(FILE* output, TArrayOfCrypto *crypto, char* format);
 
-void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto);
+void printHead();
+
+int print(TArrayOfCrypto* crypto);
+
+void writeOne(FILE *file, TCryptocurrency cryptocurrency, char* format);
+
 
 // function to swap elements
 void swap(TCryptocurrency array[], int x, int y);

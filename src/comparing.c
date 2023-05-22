@@ -22,8 +22,6 @@ int compare(TCryptocurrency x, TCryptocurrency y, CompareType type)
             return strcmp(x.founder_name, y.founder_name);
         case ByPrice:
             return x.price - y.price;
-        case ByCentralization:
-            return x.centralized - y.centralized;
   }
 }
 

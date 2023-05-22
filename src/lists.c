@@ -7,10 +7,10 @@
 #include "comparing.h"
 
 
-int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
+int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format)
 {
     int temp;
-    if (fscanf(input, "%d %d %40s %40s %f %d\n", 
+    if (fscanf(input, format, 
         &cryptocurrency->id,
         &cryptocurrency->foundation_year,
         cryptocurrency->name,
@@ -29,7 +29,7 @@ int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency)
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
 {
     TArrayOfCrypto * array = malloc(sizeof(TArrayOfCrypto));
-    array->capacity = sizeof(TArrayOfCrypto);
+    array->lenght = sizeof(TArrayOfCrypto);
     if (array == NULL) return NULL;
 
     array->value = NULL;
@@ -42,7 +42,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     int checking;
 
     while(i < MAXN && 
-            (checking = loadOneCrypto(file, &cryptocurrency)) == 0) {
+            (checking = loadOneCrypto(file, &cryptocurrency, DATA_FORMAT)) == 0) {
         if (i == array->lenght) {
             array->lenght += BLOCK;
             TCryptocurrency * temp = realloc(array->value, array->lenght * sizeof(TCryptocurrency));
@@ -65,25 +65,60 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     return array;
 }
 
-void printOneCrypto(FILE *file, TCryptocurrency cryptocurrency)
+/** 
+ * Outputs list to dedicated file with given format string
+ */
+void write(FILE* output, TArrayOfCrypto *crypto, char* format)
 {
-    if (!cryptocurrency.deleted) {
-        fprintf(file, "%d %d %s %s %.2f\n", 
-        cryptocurrency.id,
-        cryptocurrency.foundation_year,
-        cryptocurrency.name,
-        cryptocurrency.founder_name,
-        cryptocurrency.price);
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        if (crypto->value[i].deleted) {
+            continue;
+        }
+
+        writeOne(output, crypto->value[i], format);
     }
 }
 
-void writeCryptocurrencies(FILE *output, TArrayOfCrypto *crypto)
+/**
+ * Outputs head of table
+ */
+void printHead()
 {
-    rewind(output);
-    for (int i = 0; i < crypto->lenght; i++) {
-        printOneCrypto(output, crypto->value[i]);
-    }
+    puts(
+        "+----+-----------------+---------------+-------------------+-----------+\n"
+        "| id | Foundation year |  Crypto name  | Founder name      | Price $   |\n"
+        "|----+-----------------+---------------+-------------------+-----------|"
+    );
 }
+
+void printTail()
+{
+    puts(
+        "+----+-----------------+---------------+-------------------+-----------+\n"
+    );
+}
+
+/**
+ * Prints whole list to stdout with pretty format
+ */
+int print(TArrayOfCrypto* crypto)
+{
+    printHead();
+    write(stdout, crypto, PRETTY_FORMAT);
+    printTail();
+    return 0;
+}
+
+void writeOne(FILE *file, TCryptocurrency cryptocurrency, char* format)
+{
+    fprintf(file, format, 
+    cryptocurrency.id,
+    cryptocurrency.foundation_year,
+    cryptocurrency.name,
+    cryptocurrency.founder_name,
+    cryptocurrency.price);
+}
+
 
 // function to swap elements
 void swap(TCryptocurrency array[], int x, int y)
@@ -146,6 +181,6 @@ void sort(FILE *output, TArrayOfCrypto *crypto, CompareType type)
 {
     quickSort(crypto->value, 0, crypto->lenght - 1, type);
     rewind(output);
-    writeCryptocurrencies(output, crypto);
+    print(crypto);
 }
 
