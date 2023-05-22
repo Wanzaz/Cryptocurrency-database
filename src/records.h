@@ -1,5 +1,5 @@
-#ifndef ACTIONS_H_
-#define ACTIONS_H_
+#ifndef RECORDS_H_
+#define RECORDS_H_
 
 #include <stdio.h>
 #include <stdlib.h>

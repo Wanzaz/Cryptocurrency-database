@@ -4,6 +4,13 @@
 #include "lists.h"
 
 
+void mapNotDeletedCrypto(TCryptocurrency *cryptocurrency, void (*function)(TCryptocurrency *crypto))
+{
+        if (!cryptocurrency) {
+            function(cryptocurrency);
+        }
+}
+
 int averageFoundationYear(TArrayOfCrypto *crypto)
 {
     int sum = 0;
@@ -14,15 +21,6 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
     }
 
     return sum/(crypto->lenght - 1);
-}
-
-int lenghtOfNotDeletedCrypto(TArrayOfCrypto *crypto)
-{
-    int length;
-    for (int i = 0; i < crypto->lenght - 1; i++) {
-        
-    }
-
 }
 
 int oldest(TArrayOfCrypto *crypto)
