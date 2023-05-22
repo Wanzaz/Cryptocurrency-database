@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
                 sort(stdout, crypto, ByName); // alphabetically
                 break;
             case 8: clear();
-                beforeYear(stdout, crypto);
+                foundedBeforeYear(crypto);
                 break;
             case 9: clear();
                 summary(crypto);

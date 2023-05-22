@@ -4,34 +4,65 @@
 #include "lists.h"
 
 
-void mapNotDeletedCrypto(TCryptocurrency *cryptocurrency, void (*function)(TCryptocurrency *crypto))
+// TODO: My attempt to make a filter function more generic
+/* void mapNotDeletedCrypto(TCryptocurrency *cryptocurrency, void (*function)(TCryptocurrency *crypto)) */
+/* { */
+/*         if (!cryptocurrency) { */
+/*             function(cryptocurrency); */
+/*         } */
+/* } */
+
+
+int numberOfNotDeletedCrypto(TArrayOfCrypto *crypto)
 {
-        if (!cryptocurrency) {
-            function(cryptocurrency);
+    int not_deleted = 0;
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        if (!crypto->value[i].deleted) {
+            not_deleted++;
         }
+    }
+
+    return not_deleted;
 }
 
 int averageFoundationYear(TArrayOfCrypto *crypto)
 {
     int sum = 0;
+    int not_deleted = 0;
     for (int i = 0; i < crypto->lenght - 1; i++) {
         if (!crypto->value[i].deleted) {
             sum += crypto->value[i].foundation_year;
+            not_deleted++;
         }
     }
 
-    return sum/(crypto->lenght - 1);
+    return sum/not_deleted;
 }
 
 int oldest(TArrayOfCrypto *crypto)
 {
-    return crypto->value[crypto->lenght - 1].foundation_year;
+    int oldest = crypto->value[0].foundation_year;
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        if (!crypto->value[i].deleted && crypto->value[i].foundation_year < oldest) {
+            oldest = crypto->value[i].foundation_year;
+        }
+    }
+
+    return oldest;
 }
 
 int youngest(TArrayOfCrypto *crypto)
 {
-    return crypto->value[0].foundation_year;
+    int youngest = crypto->value[0].foundation_year;
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        if (!crypto->value[i].deleted && crypto->value[i].foundation_year > youngest) {
+            youngest = crypto->value[i].foundation_year;
+        }
+    }
+
+    return youngest;
 }
+
 
 void summary(TArrayOfCrypto *crypto)
 {
@@ -40,28 +71,23 @@ void summary(TArrayOfCrypto *crypto)
            "The average year of foundation: %d\n"
            "The youngest cryptocurrency was founded in year: %d\n"
            "The oldest cryptocurrency was founded in year: %d\n"
-           , crypto->lenght, averageFoundationYear(crypto), youngest(crypto), oldest(crypto));
+           , numberOfNotDeletedCrypto(crypto), averageFoundationYear(crypto), youngest(crypto), oldest(crypto));
 }
 
 
 
 /*************** FILTER FUNCTION ***************/
 
-void foundedBeforeYear(FILE *output, TArrayOfCrypto *crypto, int before_year)
-{
-    printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
-    for (int i = 0; i < crypto->lenght - 1; i++) {
-        if (crypto->value[i].foundation_year < before_year && (!crypto->value[i].id)) {
-            printOneCrypto(output, crypto->value[i]);
-        }
-    }
-}
-
-void beforeYear(FILE *output, TArrayOfCrypto *crypto)
+void foundedBeforeYear(TArrayOfCrypto *crypto)
 {
     int before_year;
     printf("[INSTRUCTION]: By which year do you wanna see the founded cryptocurrencies: \n");
     scanf("%i", &before_year);
     clear();
-    foundedBeforeYear(output, crypto, before_year);
+    printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        if (crypto->value[i].foundation_year < before_year && (!crypto->value[i].deleted)) {
+            printOneCrypto(stdout, crypto->value[i]);
+        }
+    }
 }
