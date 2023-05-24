@@ -96,12 +96,14 @@ void searchByName(TArrayOfCrypto *crypto)
     printf("[INSTRUCTION]: Enter a name of searched cryptocurrency: \n");
     scanf("%40s", searched_name);
 
+    printHead();
     for (int i = 0; i < crypto->lenght; i++) {
-        if (strcmp(crypto->value[i].name, searched_name) == 0) {
-            writeOne(stdout, crypto->value[i], DATA_FORMAT);
+        if (strcmp(crypto->value[i].name, searched_name) == 0 && !crypto->value[i].deleted) {
+            writeOne(stdout, crypto->value[i], PRETTY_FORMAT);
             found++;
         }
     }
+    printTail();
 
     if (found == 0) {
         printf("[ERROR]: Item wasn't found.\n");

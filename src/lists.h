@@ -15,6 +15,8 @@ void write(FILE* output, TArrayOfCrypto *crypto, char* format);
 
 void printHead();
 
+void printTail();
+
 int print(TArrayOfCrypto* crypto);
 
 void writeOne(FILE *file, TCryptocurrency cryptocurrency, char* format);
