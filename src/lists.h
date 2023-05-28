@@ -8,6 +8,9 @@
 #define BlOCK 32
 
 int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format);
+/* int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format, int number_given); */
+
+int loadOneCryptoInput(FILE *input, TCryptocurrency *cryptocurrency, char* format);
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file);
 

@@ -17,7 +17,7 @@
  * */
 #define DATA_FORMAT "%d %d %40s %40s %f %d\n"
 #define PRETTY_FORMAT "| %2d | %15d | %13s | %17s | %9.2f |\n"
-#define INPUT_FORMAT "%d %15[^\n] %15[^\n] %d %f\n"
+#define INPUT_FORMAT "%d %40[^\n] %40[^\n] %f\n"
 
 
 #include<stdbool.h>
@@ -43,15 +43,6 @@ typedef struct _array {
     TCryptocurrency *value;
     int lenght;
 } TArrayOfCrypto;
-
-
-/*
- * Represents one item for menu
- * */
-/* typedef struct { */
-/*     char* description; */
-/*     int (*function)(TArrayOfCrypto* list); */
-/* } Taction; */
 
 
 /*

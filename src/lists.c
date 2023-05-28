@@ -9,21 +9,33 @@
 
 int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format)
 {
-    int temp;
-    if (fscanf(input, format, 
+    int temp, result;
+    result = fscanf(input, format, 
         &cryptocurrency->id,
         &cryptocurrency->foundation_year,
         cryptocurrency->name,
         cryptocurrency->founder_name,
         &cryptocurrency->price,
-        &temp) == 6) {
+        &temp); 
 
         cryptocurrency->deleted = temp;
-
-        return 0;
-    }
-    return -5;
+    return result;
 }
+
+/* int loadOneCryptoInput(FILE *input, TCryptocurrency *cryptocurrency, char* format) */
+/* { */
+/*     if (fscanf(input, format, */ 
+/*         &cryptocurrency->foundation_year, */
+/*         cryptocurrency->name, */
+/*         cryptocurrency->founder_name, */
+/*         &cryptocurrency->price) == 4) { */
+
+/*         cryptocurrency->deleted = false; */
+
+/*         return 0; */
+/*     } */
+/*     return -5; */
+/* } */
 
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
@@ -42,7 +54,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
     int checking;
 
     while(i < MAXN && 
-            (checking = loadOneCrypto(file, &cryptocurrency, DATA_FORMAT)) == 0) {
+            (checking = loadOneCrypto(file, &cryptocurrency, DATA_FORMAT)) == 6) {
         if (i == array->lenght) {
             array->lenght += BLOCK;
             TCryptocurrency * temp = realloc(array->value, array->lenght * sizeof(TCryptocurrency));

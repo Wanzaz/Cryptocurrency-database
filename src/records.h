@@ -15,6 +15,8 @@ void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[]);
 
 void searchByName(TArrayOfCrypto *crypto);
 
+int searchByNameReturnIndex(TArrayOfCrypto *crypto, char searched_name[]);
+
 void dataBackup(FILE *output, TArrayOfCrypto *crypto);
 
 #endif

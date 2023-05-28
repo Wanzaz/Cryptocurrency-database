@@ -13,7 +13,6 @@
 // - enum for error returns
 // - error with wrong format
 // - make it more generic
-// - optimize algorithm for searching
 // - add capacity to dynamic array
 
 
