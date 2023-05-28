@@ -63,17 +63,26 @@ int main(int argc, char *argv[])
                 sort(stdout, crypto, ByFoundationYear);
                 break;
             case 7: clear();
-                sort(stdout, crypto, ByName); // alphabetically
+                sort(stdout, crypto, ByName); 
                 break;
             case 8: clear();
-                foundedBeforeYear(crypto);
+                sort(stdout, crypto, ByFounderName); 
                 break;
-            case 9: clear();
-                summary(crypto);
-                break;
+            /* case 9: clear(); */
+            /*     sort(stdout, crypto, ByPrice); */ 
+            /*     break; */
             case 10: clear();
-                dataBackup(database, crypto);
-                printf("\n%d records were saved.\n", crypto->lenght);
+                sort(stdout, crypto, ById);
+                break;
+            case 11: clear();
+                 foundedBeforeYear(crypto);
+                break;
+            case 12: clear();
+                 summary(crypto);
+                break;
+            case 13: clear();
+                 dataBackup(database, crypto);
+                 printf("\n%d records were saved.\n", crypto->lenght);
                 break;
         }
             pause();

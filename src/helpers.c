@@ -30,7 +30,7 @@ void clear(void)
 int checkingForUserChoice()
 {
     int choice, check;
-    if ((check = scanf("%i", &choice) != 1)) {
+    if ((check = scanf("%i", &choice) != 1) || choice < 0 || choice > 13) {
         printf("\n[ERROR]: Uknown operation\n"
                " Exiting the program...\n");
         exit(-4);
@@ -51,10 +51,13 @@ void mainMenu()
         "\t4 - remove a record\n"
         "\t5 - search data by a cryptocurrency name\n"
         "\t6 - sort by a foundation year\n"
-        "\t7 - sort by a cryptocurrency name alphabetically\n"
-        "\t8 - filter data by a foundation year\n"
-        "\t9 - summary\n"
-        "\t10 - data backup\n"
+        "\t7 - sort by a cryptocurrency name\n"
+        "\t8 - sort by a founder\n"
+        /* "\t9 - sort by a price\n" */
+        "\t10 - sort by id\n"
+        "\t11 - filter data by a foundation year\n"
+        "\t12 - summary\n"
+        "\t13 - data backup\n"
         "Choose an operation: "
 	);
 }
