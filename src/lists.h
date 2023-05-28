@@ -16,6 +16,8 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file);
 
 void write(FILE* output, TArrayOfCrypto *crypto, char* format);
 
+void writeAll(FILE* output, TArrayOfCrypto *crypto, char* format);
+
 void printHead();
 
 void printTail();
@@ -23,6 +25,8 @@ void printTail();
 int print(TArrayOfCrypto* crypto);
 
 void writeOne(FILE *file, TCryptocurrency cryptocurrency, char* format);
+
+void writeOnePrint(FILE *file, TCryptocurrency cryptocurrency, char* format);
 
 
 // function to swap elements

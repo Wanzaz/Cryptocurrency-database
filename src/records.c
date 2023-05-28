@@ -97,8 +97,15 @@ void searchByName(TArrayOfCrypto *crypto)
     }
 }
 
-void dataBackup(FILE *output, TArrayOfCrypto *crypto)
+void dataBackup(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 {
-    /* printf("[INFO]: Data were successfully backed up.\n"); */
-    /* writeCryptocurrencies(output, crypto); */
+    FILE *backup = fopen(inputpath, "w");
+    if (backup == NULL) {
+        printf("[ERROR]: Couldn't open file.\n");
+        return;
+    }
+
+    printf("[INFO]: Data were successfully backed up.\n");
+    writeAll(backup, crypto, PRINT_DATA_FORMAT);
+    fclose(backup);
 }

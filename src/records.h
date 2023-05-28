@@ -15,6 +15,6 @@ void searchByName(TArrayOfCrypto *crypto);
 
 int searchByNameReturnIndex(TArrayOfCrypto *crypto, char searched_name[]);
 
-void dataBackup(FILE *output, TArrayOfCrypto *crypto);
+void dataBackup(FILE *output, TArrayOfCrypto *crypto, char inputpath[]);
 
 #endif

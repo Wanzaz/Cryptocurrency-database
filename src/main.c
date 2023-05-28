@@ -77,11 +77,10 @@ int main(int argc, char *argv[])
                  foundedBeforeYear(crypto);
                 break;
             case 12: clear();
-                 summary(crypto);
+                summary(crypto);
                 break;
             case 13: clear();
-                 dataBackup(database, crypto);
-                 printf("\n%d records were saved.\n", crypto->lenght);
+                dataBackup(database, crypto, inputpath);
                 break;
         }
             pause();

@@ -91,6 +91,17 @@ void write(FILE* output, TArrayOfCrypto *crypto, char* format)
     }
 }
 
+/** 
+ * Outputs list to dedicated file with given format string with deleted records
+ */
+
+void writeAll(FILE* output, TArrayOfCrypto *crypto, char* format)
+{
+    for (int i = 0; i < crypto->lenght - 1; i++) {
+        writeOnePrint(output, crypto->value[i], format);
+    }
+}
+
 /**
  * Outputs head of table
  */
@@ -129,6 +140,17 @@ void writeOne(FILE *file, TCryptocurrency cryptocurrency, char* format)
     cryptocurrency.name,
     cryptocurrency.founder_name,
     cryptocurrency.price);
+}
+
+void writeOnePrint(FILE *file, TCryptocurrency cryptocurrency, char* format)
+{
+    fprintf(file, format, 
+    cryptocurrency.id,
+    cryptocurrency.foundation_year,
+    cryptocurrency.name,
+    cryptocurrency.founder_name,
+    cryptocurrency.price,
+    cryptocurrency.deleted);
 }
 
 
