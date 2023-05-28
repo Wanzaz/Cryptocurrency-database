@@ -49,18 +49,6 @@ void changeRecord(FILE *output, TArrayOfCrypto *crypto)
     /* } */
 }
 
-int removeBackup(TArrayOfCrypto *crypto, char inputpath[])
-{
-    /* FILE *database = fopen(inputpath, "w"); */
-    /* if (database == NULL) return -1; */
-
-    /* for (int i = 0; i < crypto->lenght; i++) { */
-    /*     printOneCrypto(database, crypto->value[i]); */
-    /* } */
-
-    /* fclose(database); */
-    return 0;
-}
 
 void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 {
