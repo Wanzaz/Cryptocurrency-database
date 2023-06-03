@@ -27,7 +27,6 @@ void addRecord(FILE *output, TArrayOfCrypto *crypto)
         crypto->value[crypto->lenght] = new;
         crypto->value[crypto->lenght].id = highestID(crypto) + 1;
         crypto->value[crypto->lenght].deleted = false;
-        printf("%d\n", crypto->lenght);
         crypto->lenght++;
 
         printHead();
@@ -42,28 +41,52 @@ void addRecord(FILE *output, TArrayOfCrypto *crypto)
 
 void changeRecord(FILE *output, TArrayOfCrypto *crypto)
 {
-    /* int index; */
-    /* writeCryptocurrencies(stdout, crypto); */
+    TCryptocurrency new;
+    char searched_name[41];
+    char answer;
+    int old_id;
 
-    /* printf("\n\n[INSTRUCTION]: Enter record index which you wanna change: \n"); */
-    /* scanf("%d", &index); */
+    printf("[INSTRUCTION]: Enter a name of searched cryptocurrency that you want to CHANGE: \n");
+    clearBuffer();
+    scanf("%40s", searched_name);
 
-    /* if (index >= 0 && index < crypto->lenght) { */
-    /*     TCryptocurrency new_cryptocurrency; */
-    /*     printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n"); */
+    int *found = arrayOfSearchedNameIndexes(crypto, searched_name);
+    if (found[0] != 0) {
+        for (int i = 0; found[i] != 0; i++) {
+            clear();
+            printf("Do you wanna change this record? (y/n)\n");
+            printHead();
+            writeOne(stdout, crypto->value[found[i] - 1], PRETTY_FORMAT);
+            printTail();
 
-    /*     if (loadOneCrypto(stdout, &new_cryptocurrency) == 0) { */
-    /*         crypto->value[index] = new_cryptocurrency; */
+            printf("[INSTRUCTION]: Enter your answer: ");
+            clearBuffer();
+            scanf("%c", &answer);
 
-    /*         printf("[INFO]: Record was successfully changed.\n\n\n"); */
-    /*         writeCryptocurrencies(output, crypto); */
-    /*     } else { */
-    /*         printf("[ERROR]: Information in a wrong format.\n"); */
-    /*     } */
+            if (answer == 'y') {
+                printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
+                if (loadOneCryptoInput(stdin, &new, INPUT_FORMAT) == 4 && crypto->lenght < MAXN) {
+                    old_id = crypto->value[found[i] - 1].id;
+                    crypto->value[found[i] - 1] = new;
+                    crypto->value[found[i] - 1].deleted = false;
+                    crypto->value[found[i] - 1].id = old_id;
 
-    /* } else { */
-    /*     printf("[ERROR]: Wrong index.\n"); */
-    /* } */
+                    printHead();
+                    writeOne(output, crypto->value[found[i] - 1], PRETTY_FORMAT);
+                    printTail();
+                    printf("\n[INFO]: Record was successfully changed.\n\n\n");
+                    
+                } else {
+                    printf("[ERROR]: Information in a wrong format.\n");
+                }
+            }
+        }
+    } else {
+        printf("[ERROR]: Item wasn't found.\n");
+    }
+
+    free(found);
+
 }
 
 
@@ -72,7 +95,7 @@ void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
     char searched_name[41];
     char answer;
 
-    printf("[INSTRUCTION]: Enter a name of searched cryptocurrency that you want to deleted: \n");
+    printf("[INSTRUCTION]: Enter a name of searched cryptocurrency that you want to DELETE: \n");
     scanf("%40s", searched_name);
 
     int *found = arrayOfSearchedNameIndexes(crypto, searched_name);
