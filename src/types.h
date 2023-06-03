@@ -18,7 +18,7 @@
 #define DATA_FORMAT "%d %d %40s %40s %f %d\n"
 #define PRINT_DATA_FORMAT "%d %d %s %s %f %d\n"
 #define PRETTY_FORMAT "| %2d | %15d | %13s | %17s | %9.2f |\n"
-#define INPUT_FORMAT "%d %40[^\n] %40[^\n] %f\n"
+#define INPUT_FORMAT "%d %s %s %f"
 
 
 #include<stdbool.h>

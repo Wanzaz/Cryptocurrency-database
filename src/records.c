@@ -6,17 +6,34 @@
 #include "lists.h"
 #include "comparing.h"
 
+
+int highestID(TArrayOfCrypto *crypto)
+{
+    int highest = 0;
+    for (int i = 0; i < crypto->lenght; i++) {
+        if (crypto->value[i].id > highest && !crypto->value[i].deleted) {
+            highest = crypto->value[i].id;
+        }
+    }
+    return highest;
+}
+
 void addRecord(FILE *output, TArrayOfCrypto *crypto)
 {
     TCryptocurrency new;
     printf("[INSTRUCTION]: Enter info in format: foundation_year name founder_name price\n");
-    if (loadOneCrypto(stdout, &new, INPUT_FORMAT) == 4 && crypto->lenght < MAXN) {
-
+    clearBuffer();
+    if (loadOneCryptoInput(stdin, &new, INPUT_FORMAT) == 4 && crypto->lenght < MAXN) {
         crypto->value[crypto->lenght] = new;
+        crypto->value[crypto->lenght].id = highestID(crypto) + 1;
+        crypto->value[crypto->lenght].deleted = false;
+        printf("%d\n", crypto->lenght);
         crypto->lenght++;
 
+        printHead();
+        writeOne(output, crypto->value[crypto->lenght - 1], PRETTY_FORMAT);
+        printTail();
         printf("[INFO]: Record was successfully added.\n\n\n");
-        write(stdout, crypto, PRETTY_FORMAT);
         
     } else {
         printf("[ERROR]: Information in a wrong format.\n");

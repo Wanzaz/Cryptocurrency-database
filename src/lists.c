@@ -22,20 +22,17 @@ int loadOneCrypto(FILE *input, TCryptocurrency *cryptocurrency, char* format)
     return result;
 }
 
-/* int loadOneCryptoInput(FILE *input, TCryptocurrency *cryptocurrency, char* format) */
-/* { */
-/*     if (fscanf(input, format, */ 
-/*         &cryptocurrency->foundation_year, */
-/*         cryptocurrency->name, */
-/*         cryptocurrency->founder_name, */
-/*         &cryptocurrency->price) == 4) { */
+int loadOneCryptoInput(FILE *input, TCryptocurrency *cryptocurrency, char* format)
+{
+    int result;
+    result = fscanf(input, format, 
+        &cryptocurrency->foundation_year,
+        cryptocurrency->name,
+        cryptocurrency->founder_name,
+        &cryptocurrency->price); 
 
-/*         cryptocurrency->deleted = false; */
-
-/*         return 0; */
-/*     } */
-/*     return -5; */
-/* } */
+    return result;
+}
 
 
 TArrayOfCrypto * loadCryptocurrencies(FILE *file)
@@ -82,7 +79,7 @@ TArrayOfCrypto * loadCryptocurrencies(FILE *file)
  */
 void write(FILE* output, TArrayOfCrypto *crypto, char* format)
 {
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (crypto->value[i].deleted) {
             continue;
         }
@@ -97,7 +94,7 @@ void write(FILE* output, TArrayOfCrypto *crypto, char* format)
 
 void writeAll(FILE* output, TArrayOfCrypto *crypto, char* format)
 {
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         writeOnePrint(output, crypto->value[i], format);
     }
 }
