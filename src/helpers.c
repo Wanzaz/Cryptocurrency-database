@@ -39,6 +39,11 @@ int checkingForUserChoice()
     return choice;
 }
 
+void clearBuffer(void)
+{
+    fflush(stdin);
+}
+
 void mainMenu()
 {
     clear();

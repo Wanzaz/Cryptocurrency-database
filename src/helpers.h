@@ -13,6 +13,8 @@ void clear(void);
 
 int checkingForUserChoice();
 
+void clearBuffer();
+
 void mainMenu();
 
 void exitProgram();

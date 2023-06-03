@@ -53,27 +53,55 @@ void changeRecord(FILE *output, TArrayOfCrypto *crypto)
 void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
 {
     char searched_name[41];
+    char answer;
+
     printf("[INSTRUCTION]: Enter a name of searched cryptocurrency that you want to deleted: \n");
     scanf("%40s", searched_name);
 
-    int index = searchByNameReturnIndex(crypto, searched_name);
-    if (index != -1) {
-        crypto->value[index].deleted = 1;
-        printf("[INFO]: Record was successfully deleted.\n\n\n");
-        write(stdout, crypto, PRETTY_FORMAT);
+    int *found = arrayOfSearchedNameIndexes(crypto, searched_name);
+    if (found[0] != 0) {
+        for (int i = 0; found[i] != 0; i++) {
+            clear();
+            printf("Do you wanna delete this record? (y/n)\n");
+            printHead();
+            writeOne(stdout, crypto->value[found[i] - 1], PRETTY_FORMAT);
+            printTail();
+
+            printf("[INSTRUCTION]: Enter your answer: ");
+            clearBuffer();
+            scanf("%c", &answer);
+
+            if (answer == 'y') {
+                crypto->value[found[i] - 1].deleted = true;
+                printf("\n[INFO]: Record was successfully deleted.\n\n\n");
+            }
+        }
     } else {
         printf("[ERROR]: Item wasn't found.\n");
     }
+
+    free(found);
 }
 
-int searchByNameReturnIndex(TArrayOfCrypto *crypto, char searched_name[])
+int *arrayOfSearchedNameIndexes(TArrayOfCrypto *crypto, char searched_name[])
 {
+    int *found = malloc(crypto->lenght * sizeof(int));
+    found[0] = 0;
+
+    if (!found) {
+        printf("[ERROR]: Couldn't allocate memory.\n");
+        return NULL;
+    }
+
+    int j = 0;
     for (int i = 0; i < crypto->lenght; i++) {
         if (strcmp(crypto->value[i].name, searched_name) == 0 && !crypto->value[i].deleted) {
-            return i;
+            found[j] = i + 1;
+            j++;
         }
     }
-    return -1;
+
+    return found;
 }
 
 void searchByName(TArrayOfCrypto *crypto)
@@ -105,7 +133,8 @@ void dataBackup(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
         return;
     }
 
-    printf("[INFO]: Data were successfully backed up.\n");
     writeAll(backup, crypto, PRINT_DATA_FORMAT);
+    printf("[INFO]: Data were successfully backed up.\n");
     fclose(backup);
+    print(crypto);
 }

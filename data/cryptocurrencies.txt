@@ -1,5 +1,5 @@
 1 2009 Bitcoin Satoshi-Nakamoto 25605.50 0
-2 2009 Bitcoin Satoshi-Nakamoto 25605.50 0
+2 2009 Bitcoin Satoshi-Nakamoto 24605.50 0
 3 2010 Litecoin Satoshi-Nakamoto 81.11 0
 4 2011 Namecoin Vincent-Durham 1.30 1
 5 2012 Peercoin Sunny-King 0.45 1 
