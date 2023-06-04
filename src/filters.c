@@ -16,7 +16,7 @@
 int numberOfNotDeletedCrypto(TArrayOfCrypto *crypto)
 {
     int not_deleted = 0;
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (!crypto->value[i].deleted) {
             not_deleted++;
         }
@@ -29,7 +29,7 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
 {
     int sum = 0;
     int not_deleted = 0;
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (!crypto->value[i].deleted) {
             sum += crypto->value[i].foundation_year;
             not_deleted++;
@@ -42,7 +42,7 @@ int averageFoundationYear(TArrayOfCrypto *crypto)
 int oldest(TArrayOfCrypto *crypto)
 {
     int oldest = crypto->value[0].foundation_year;
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (!crypto->value[i].deleted && crypto->value[i].foundation_year < oldest) {
             oldest = crypto->value[i].foundation_year;
         }
@@ -54,7 +54,7 @@ int oldest(TArrayOfCrypto *crypto)
 int youngest(TArrayOfCrypto *crypto)
 {
     int youngest = crypto->value[0].foundation_year;
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (!crypto->value[i].deleted && crypto->value[i].foundation_year > youngest) {
             youngest = crypto->value[i].foundation_year;
         }
@@ -86,7 +86,7 @@ void foundedBeforeYear(TArrayOfCrypto *crypto)
     clear();
     printf("[THE CRYPTOCURRENCIES WHICH WERE FOUNDED BEFORE YEAR %i]:\n", before_year);
     printHead();
-    for (int i = 0; i < crypto->lenght - 1; i++) {
+    for (int i = 0; i < crypto->lenght; i++) {
         if (crypto->value[i].foundation_year < before_year && (!crypto->value[i].deleted)) {
             writeOne(stdout, crypto->value[i], PRETTY_FORMAT);
         }
