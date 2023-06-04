@@ -8,7 +8,7 @@ CFLAGS  = -g -Wall
   
 # the name to use for both the target source file, and the output file:
 TARGET = src/*
-BINS = a.out
+BINS = crypto 
  
 # all: $(TARGET)
   
