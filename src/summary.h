@@ -1,5 +1,5 @@
-#ifndef FILTERS_H_
-#define FILTERS_H_
+#ifndef SUMMARY_H_ 
+#define SUMMARY_H_
 
 #include <stdio.h>
 #include "types.h"

@@ -3,7 +3,7 @@
 #include <string.h>  // for work with text strings
 #include <stdbool.h> // for work with type of bool and constants true and false
 #include "types.h"
-#include "filters.h"
+#include "summary.h"
 #include "records.h"
 #include "helpers.h"
 #include "lists.h"
