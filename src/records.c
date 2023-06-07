@@ -123,10 +123,17 @@ void removeRecord(FILE *output, TArrayOfCrypto *crypto, char inputpath[])
     free(found);
 }
 
+void fillArrayWithZeroes(int *array, int lenght)
+{
+    for (int i = 0; i < lenght; i++) {
+        array[i] = 0;
+    }
+}
+
 int *arrayOfSearchedNameIndexes(TArrayOfCrypto *crypto, char searched_name[])
 {
     int *found = malloc(crypto->lenght * sizeof(int));
-    found[0] = 0;
+    fillArrayWithZeroes(found, crypto->lenght);
 
     if (!found) {
         printf("[ERROR]: Couldn't allocate memory.\n");
