@@ -1,11 +1,15 @@
 # Cryptocurrency-database
 - school project focused on processing with data
 
-# Compilation
-```make```
+## Compilation
+```sh
+make
+```
 
-# Execution
-```./crypto data/cryptocurrencies.txt```
+## Execution
+```sh
+./crypto data/cryptocurrencies.txt
+```
 
-# Aplication Docs
+## Aplication Docs
 See [overleaf](https://www.overleaf.com/read/byjjvxftdhnf).
