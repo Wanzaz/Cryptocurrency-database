@@ -1,5 +1,5 @@
 # Cryptocurrency-database
-- school project focused on processing with data
+- school project on data processing
 
 ## Compilation
 ```sh
