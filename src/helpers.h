@@ -1,7 +1,6 @@
 #ifndef HELPERS_H_
 #define HELPERS_H_
 
-#include "types.h"
 #include <stdio.h>
 
 void pause(void);

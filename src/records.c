@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "types.h"
 #include "records.h"
 #include "helpers.h"
 #include "lists.h"
-#include "comparing.h"
 
 
 int highestID(TArrayOfCrypto *crypto)
