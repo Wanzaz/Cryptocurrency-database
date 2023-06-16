@@ -11,5 +11,5 @@ make
 ./crypto data/cryptocurrencies.txt
 ```
 
-## Aplication Docs
+## Application Docs
 See [overleaf](https://www.overleaf.com/read/byjjvxftdhnf).
